@@ -1,0 +1,49 @@
+body {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+}
+
+.container {
+    display: flex;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #333;
+    padding: 20px;
+    color: white;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.menu li {
+    margin-bottom: 10px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: white;
+}
+
+.parent {
+    position: relative;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+}
+
+.parent:hover .submenu {
+    display: block;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+}
