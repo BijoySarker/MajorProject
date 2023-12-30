@@ -37,28 +37,27 @@ Route::get('/forgetpassword', [ForgetPasswordManager::class, 'forgetPassword'])-
 Route::post('/forgetpassword', [ForgetPasswordManager::class, 'forgetPasswordPost'])->name('forget.password.post');
 
 //Product
-Route::get('/get_products_index', [ProductController::class, 'index'])->name('products.index');
-Route::get('/get_products_create', [ProductController::class, 'create'])->name('products.create');
-Route::post('/post_products_store', [ProductController::class, 'store'])->name('products.store');
-Route::get('/get_products/{product}', [ProductController::class, 'show'])->name('product.show');
-Route::get('/get_products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
-Route::put('/get_products/{product}', [ProductController::class, 'update'])->name('product.update');
-Route::get('/get_products/{product}/delete', [ProductController::class, 'destroy'])->name('product.destroy');
+Route::get('/product', [ProductController::class, 'index'])->name('products.index');
+Route::get('/product/create', [ProductController::class, 'create'])->name('products.create');
+Route::post('/product/store', [ProductController::class, 'store'])->name('products.store');
+Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
+Route::put('/product/{product}', [ProductController::class, 'update'])->name('product.update');
+Route::get('/product/{product}/delete', [ProductController::class, 'destroy'])->name('product.destroy');
 
 //Category
-Route::get('/get_categories_index', [CategoryController::class, 'index'])->name('categories.index');
-Route::get('/get_categories_create', [CategoryController::class, 'create'])->name('categories.create');
-Route::post('/post_categories_store', [CategoryController::class, 'store'])->name('categories.store');
-Route::get('/get_categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
-Route::get('/get_categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-Route::put('/get_categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
-Route::get('/get_categoriescts/{categoryChild}/delete', [CategoryController::class, 'destroy'])->name('categories.destroy');
+Route::get('/category', [CategoryController::class, 'index'])->name('categories.index');
+Route::get('/category/create', [CategoryController::class, 'create'])->name('categories.create');
+Route::post('/category/store', [CategoryController::class, 'store'])->name('categories.store');
+Route::get('/category/{id}', [CategoryController::class, 'show'])->name('categories.show');
+Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+Route::put('/category/{id}', [CategoryController::class, 'update'])->name('categories.update');
+Route::get('/category/{categoryChild}/delete', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
 //Brand
-Route::get('/get_brands_index', [BrandController::class, 'index'])->name('brand.index');
-Route::get('/get_brands_create', [BrandController::class, 'create'])->name('brand.create');
-Route::post('/post_brands_store', [BrandController::class, 'store'])->name('brand.store');
-Route::get('/get_brands/{product}', [BrandController::class, 'show'])->name('brand.show');
-Route::get('/get_brands/{product}/edit', [BrandController::class, 'edit'])->name('brand.edit');
-Route::put('/get_brands/{product}', [BrandController::class, 'update'])->name('brand.update');
-Route::get('/get_brands/{product}/delete', [BrandController::class, 'destroy'])->name('brand.destroy');
+Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
+Route::get('/brand/create', [BrandController::class, 'create'])->name('brand.create');
+Route::post('/brand//store', [BrandController::class, 'store'])->name('brand.store');
+Route::get('/brand/{brand}/edit', [BrandController::class, 'edit'])->name('brand.edit');
+Route::put('/brand/{brand}', [BrandController::class, 'update'])->name('brand.update');
+Route::get('/brand/{brand}/delete', [BrandController::class, 'destroy'])->name('brand.destroy');

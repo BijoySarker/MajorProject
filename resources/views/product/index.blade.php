@@ -2,6 +2,8 @@
 @section('title', 'Products')
 @section('content')
 
+
+
 <style>
         /* Add your custom styling here */
 
@@ -53,7 +55,6 @@
                 <th scope="col">Price</th>
                 <th scope="col">Category</th>
                 <th scope="col">Brand</th>
-                <th scope="col">Description</th>
                 <th scope="col">Warranty</th>
                 <th scope="col" width="280px">Action</th>
             </tr>
@@ -65,13 +66,12 @@
                     <td>{{ $product->product_name }}</td>
                     <td>{{ $product->price }}</td>
                     <td>{{ $product->category }}</td>
-                    <td>{{ $product->brand }}</td>
-                    <td>{{ $product->description }}</td>
+                    <td><img src="{{ asset($product->brand) }}" alt="Brand Image" width="50" height="50"></td>
                     <td>{{ $product->product_warranty }}</td>
                     <td>
                         <a class="btn btn-primary" href="{{ route('product.show', $product->id) }}">Show</a>
                         <a class="btn btn-warning" href="{{ route('product.edit', $product->id) }}">Edit</a>
-                        <a class="btn btn-danger" href="{{ route('product.destroy', $product->id) }}">Delete</a>
+                        <button class="btn btn-danger" onclick="confirmDelete('{{ $product->product_name }}', {{ $product->id }})">Delete</button>
                     </td>
                 </tr>
             @endforeach
@@ -83,4 +83,14 @@
     </div>
 </div>
 
+@endsection
+
+@section('scripts')
+    <script>
+        function confirmDelete(productName, productId) {
+            if (confirm('Are you sure you want to delete ' + productName + '?')) {
+                window.location.href = '/products/destroy/' + productId;
+            }
+        }
+    </script>
 @endsection

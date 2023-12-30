@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Products')
+@section('title', 'Brand')
 @section('content')
 
 <style>
@@ -55,18 +55,27 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($brands as $brand)
+            @forelse ($brands as $brand)
                 <tr>
-                    <td>{{ ++$i }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $brand->name }}</td>
-                    <td>{{ $brand->image }}</td>
-                    
+                    <td>
+                        @if ($brand->image)
+                            <img src="{{ asset($brand->image) }}" alt="{{ $brand->name }}" width="50" height="50" class="img img-responsive">
+                        @else
+                            No Image
+                        @endif
+                    </td>
                     <td>
                         <a class="btn btn-warning" href="{{ route('brand.edit', $brand->id) }}">Edit</a>
                         <a class="btn btn-danger" href="{{ route('brand.destroy', $brand->id) }}">Delete</a>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="4" class="text-center">No brands available</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\CategoryChild;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class CategoryController extends Controller
 {
@@ -16,37 +18,38 @@ class CategoryController extends Controller
 
 
     public function create()
-    {
-        $categories = Category::all();
-        $childCategories = CategoryChild::all();
+{
+    $categories = Category::all();
+    $childCategories = CategoryChild::paginate(20); // Adjust the number as needed
 
-        return view('category.create', compact('categories', 'childCategories'));
-    }
+    return view('category.create', compact('categories', 'childCategories'));
+}
+
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string',
-            'category_id' => 'nullable|string', // Change to string
-            'new_category_name' => 'nullable|string', // Add validation for new category name
+            'category_id' => 'nullable|string',
+            'new_category_name' => 'nullable|string',
             'status' => 'required|in:active,inactive',
             'image' => 'image|mimes:webp,jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
+    
         $categoryChild = new CategoryChild([
             'name' => $request->input('name'),
             'status' => $request->input('status'),
         ]);
-
+    
         if ($request->input('category_id') === 'new') {
             $request->validate([
                 'new_category_name' => 'required|string',
             ]);
-
+    
             $newParentCategory = Category::create([
                 'name' => $request->input('new_category_name'),
             ]);
-
+    
             $categoryChild->category_id = $newParentCategory->id;
         } elseif ($request->filled('category_id')) {
             $categoryChild->category_id = $request->input('category_id');
@@ -54,14 +57,18 @@ class CategoryController extends Controller
             // Handle the case when no category is selected or provided
             return redirect()->back()->with('error', 'Please select or add a valid parent category.');
         }
-
+    
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $categoryChild->image = $imagePath;
+            $fileName = time() . $request->file('image')->getClientOriginalName();
+            $path = $request->file('image')->storeAs('categories', $fileName, 'public');
+            $categoryChild->image = '/storage/' . $path;
+        } else {
+            // Handle the case where no file is uploaded (optional)
+            $categoryChild->image = null; // Or provide a default image path
         }
-
+    
         $categoryChild->save();
-
+    
         return redirect()->route('categories.create')->with('success', 'Child Category created successfully.');
     }
 
@@ -91,16 +98,17 @@ class CategoryController extends Controller
             'name' => 'required|string',
             'status' => 'required|string',
             'icon' => 'nullable|string',
+            'image' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif|max:2048', // Add validation for image
         ]);
-
+    
         $childCategory = CategoryChild::findOrFail($id);
-
+    
         // Update the fields
         $childCategory->category_id = $request->input('category_id');
         $childCategory->name = $request->input('name');
         $childCategory->status = $request->input('status');
-        $childCategory->image = $request->input('icon');
-
+        $childCategory->image = $request->input('image');
+    
         // Check if a new parent category name is provided
         if ($request->filled('new_category_name')) {
             // Update the parent category name
@@ -108,10 +116,24 @@ class CategoryController extends Controller
                 'name' => $request->input('new_category_name'),
             ]);
         }
-
-        // Save the changes
+    
+        // Check if a new image is being uploaded
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists (optional)
+            if ($childCategory->image) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $childCategory->image));
+            }
+    
+            // Upload the new image
+            $fileName = time() . $request->file('image')->getClientOriginalName();
+            $path = $request->file('image')->storeAs('categories', $fileName, 'public');
+    
+            // Update the 'image' field with the new path
+            $childCategory->image = '/storage/' . $path;
+        }
+    
         $childCategory->save();
-
+    
         return redirect()->route('categories.edit', $id)->with('success', 'Category updated successfully.');
     }
 

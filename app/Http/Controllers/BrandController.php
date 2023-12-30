@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BrandController extends Controller
 {
@@ -29,13 +30,25 @@ class BrandController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'image' => 'required',
+            'image' => 'required|image|mimes:webp,jpeg,png,jpg,gif|max:2048',
         ]);
-  
-        Brand::create($request->all());
-   
-        return redirect()->route('brand.index')->with('success','Product created successfully.');
+
+        $requestData = $request->all();
+
+    // Check if a file has been uploaded before attempting to access its properties
+    if ($request->hasFile('image')) {
+        $fileName = time() . $request->file('image')->getClientOriginalName();
+        $path = $request->file('image')->storeAs('images', $fileName, 'public');
+        $requestData["image"] = '/storage/' . $path;
+    } else {
+        // Handle the case where no file is uploaded (optional)
+        $requestData["image"] = null; // Or provide a default image path
     }
+
+    Brand::create($requestData);
+
+    return redirect()->route('brand.index')->with('success', 'Brand created successfully.');
+}
 
 
     public function show(Brand $brand)
@@ -52,16 +65,31 @@ class BrandController extends Controller
     }
 
 
-    public function update(Request $request,  Brand $brand)
+    public function update(Request $request, Brand $brand)
     {
         $request->validate([
             'name' => 'sometimes|required',
-            'image' => 'sometimes|required',
+            'image' => 'sometimes|required|image|mimes:webp,jpeg,png,jpg,gif|max:2048', 
         ]);
-  
-        $brand->update($request->all());
-  
-        return redirect()->route('brand.index')->with('success','Brand updated successfully');
+
+        $brand->update(['name' => $request->input('name')]);
+
+        // Check if a new image is being uploaded
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists (optional)
+            if ($brand->image) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $brand->image));
+            }
+
+            // Upload the new image
+            $fileName = time() . $request->file('image')->getClientOriginalName();
+            $path = $request->file('image')->storeAs('images', $fileName, 'public');
+
+            // Update the 'image' field with the new path
+            $brand->update(['image' => '/storage/' . $path]);
+        }
+
+        return redirect()->route('brand.index')->with('success', 'Brand updated successfully');
     }
 
     

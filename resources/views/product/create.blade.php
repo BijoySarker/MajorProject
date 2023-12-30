@@ -48,7 +48,12 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="brand">Brand:</label>
-                        <input type="text" name="brand" class="form-control" placeholder="Brand Name" required>
+                        <select name="brand" class="form-control" required>
+                            <option value="" disabled selected>Select Brand</option>
+                            @foreach ($brands as $brand)
+                                <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 

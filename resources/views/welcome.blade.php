@@ -1,7 +1,6 @@
 @extends('layout')
 
-@section('title', 'Registration')
+@section('title', 'MoajorProject')
 
 @section('content')
-{{-- @include('include.sidebar') --}}
 @endsection

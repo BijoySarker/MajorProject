@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Products')
+@section('title', 'Categories')
 @section('content')
 
 <style>
@@ -33,7 +33,7 @@
             </form>
         </div>
         <div class="col-lg-6 text-right">
-            <a class="btn btn-success" href="{{ route('categories.create') }}">Create Parent Category</a>
+            <a class="btn btn-primary" href="{{ route('categories.create') }}">Create New Category</a>
         </div>
     </div>
 
@@ -47,8 +47,8 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">SI</th>
-                <th scope="col">Parent Category</th>
                 <th scope="col">Category Name</th>
+                <th scope="col">Parent Category</th>
                 <th scope="col">Status</th>
                 <th scope="col">Icon</th>
                 <th scope="col" width="280px">Action</th>
@@ -57,21 +57,21 @@
         <tbody>
             @foreach ($childCategories as $childCategory)
                 <tr>
-                    <td>{{ $childCategory->id }}</td>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $childCategory->name }}</td>
                     <td>
                         @if ($childCategory->category)
                             {{ $childCategory->category->name }}
                         @else
                             No Parent Category
                         @endif
-                    </td>
-                    <td>{{ $childCategory->name }}</td>
+                    </td>       
                     <td>{{ $childCategory->status }}</td>
                     <td>
                         @if ($childCategory->image)
-                            <img src="{{ asset('path/to/your/storage/' . $childCategory->image) }}" alt="Category Image">
+                            <img src="{{ asset($childCategory->image) }}" alt="{{ $childCategory->name }}" width="50" height="50" class="img img-responsive">
                         @else
-                            No Image
+                            No Icon
                         @endif
                     </td>
                     <td>

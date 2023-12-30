@@ -20,9 +20,9 @@
             </div>
         @endif
 
-        <form action="{{ route('brand.store') }}" method="POST">
+        <form action="{{ route('brand.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
+        
             <div class="row mt-3">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -30,17 +30,17 @@
                         <input type="text" name="name" class="form-control" placeholder="Brand Name" required>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="image">Upload Image:</label>
-                    <div class="input-group">
+        
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="image">Upload Image:</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="image" name="image">
+                            <input type="file" class="custom-file-input" id="image" name="image" required>
                             <label class="custom-file-label" for="image">Choose file</label>
                         </div>
                     </div>
                 </div>
-                
+        
                 <div class="col-md-12 text-center">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>

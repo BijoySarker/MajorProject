@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -20,9 +21,11 @@ class ProductController extends Controller
 
 
     public function create()
-    {
-        return view('product.create');
-    }
+{
+    $brands = Brand::all(); // Assuming you have a Brand model
+
+    return view('product.create', ['brands' => $brands]);
+}
 
 
     public function store(Request $request)
