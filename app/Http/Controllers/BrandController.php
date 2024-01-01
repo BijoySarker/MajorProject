@@ -13,7 +13,7 @@ class BrandController extends Controller
         $query = $request->input('search');
 
         $brands = Brand::when($query, function ($q) use ($query) {
-            $q->where('product_name', 'like', '%' . $query . '%');
+            $q->where('name', 'like', '%' . $query . '%');
         })->latest()->paginate(20);
 
         return view('brand.index', compact('brands'))->with('i', ($request->input('page', 1) - 1) * 5);
@@ -35,14 +35,12 @@ class BrandController extends Controller
 
         $requestData = $request->all();
 
-    // Check if a file has been uploaded before attempting to access its properties
     if ($request->hasFile('image')) {
         $fileName = time() . $request->file('image')->getClientOriginalName();
         $path = $request->file('image')->storeAs('images', $fileName, 'public');
         $requestData["image"] = '/storage/' . $path;
     } else {
-        // Handle the case where no file is uploaded (optional)
-        $requestData["image"] = null; // Or provide a default image path
+        $requestData["image"] = null;
     }
 
     Brand::create($requestData);
@@ -53,8 +51,6 @@ class BrandController extends Controller
 
     public function show(Brand $brand)
     {
-        // $product = Product::where('id', $id)->get();
-        // dd($product);
         return view('brand.show',compact('brand'));
     }
 

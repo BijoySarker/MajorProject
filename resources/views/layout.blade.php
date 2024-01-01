@@ -1,40 +1,3 @@
-{{-- <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', '')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <meta charset="UTF-8">
-    <!--<title> Drop Down Sidebar Menu | CodingLab </title>-->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Boxiocns CDN Link -->
-    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <style>
-      
-     </style>
-  </head>
-  <body>  
-
-    <div class="container-fluid">
-      @include('include.header')
-    </div>
-
-    <div class="container-fluid">
-      @if(!request()->is('login') && !request()->is('registration'))
-          @include('include.sidebar')
-      @endif
-    </div>
-
-    <div class="container">
-      @yield('content')
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
-</html> --}}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,16 +59,20 @@
 
 
     <div class="container-fluid">
-      @if(!request()->is('login') && !request()->is('registration'))
-          @include('include.sidebar')
-      @endif
+        @if(!request()->is('login') && !request()->is('registration'))
+            @include('include.sidebar')
+        @endif
     </div>
+
+    @auth
+        @yield('dashboard')
+    @endauth
 
     <div class="container">
       @yield('content')
       @yield('scripts')
     </div>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

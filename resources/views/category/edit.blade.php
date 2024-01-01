@@ -19,7 +19,7 @@
             </div>
         @endif
 
-        <form action="{{ route('categories.update',$childCategory->id) }}" method="POST">
+        <form action="{{ route('categories.update', $childCategory->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -58,51 +58,76 @@
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="icon">Icon:</label>
-                
-                        <!-- Display current image -->
-                        @if($childCategory->image)
-                            <img src="{{ asset('storage/' . $childCategory->image) }}" alt="Current Image" style="max-width: 100%;">
-                        @endif
-                
-                        <br>
-                
-                        <!-- Checkbox to delete the current image -->
-                        <input type="checkbox" id="deleteImage" name="deleteImage">
-                        <label for="deleteImage">Delete current image</label>
-                
-                        <!-- File input for uploading a new image -->
-                        <input type="file" name="newIcon" id="newIcon" style="display: none;">
+                        <label for="image">Image:</label>
+                        <div id="imageContainer" class="mb-3">
+                            @if ($childCategory->image)
+                                <img src="{{ asset($childCategory->image) }}" alt="Image" class="img-thumbnail">
+                                <button type="button" class="btn btn-danger mt-2" id="removeImageButton">Remove Image</button>
+                                <input type="hidden" name="remove_image" id="removeImageInput" value="0">
+                            @endif
+                        </div>
+                        <div id="newImageSection" style="display:none;">
+                            <input type="file" name="image" id="newImage" class="form-control">
+                        </div>
                     </div>
                 </div>
-
+            
                 <div class="col-md-12 text-center">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
-            </div>
-        </form>
+            </form>
     </div>
 
     <script>
-        
-        // Add this script to toggle the visibility of the new_category_name input field
         document.addEventListener('DOMContentLoaded', function () {
-            const categorySelect = document.getElementById('category_id');
-            const newCategoryInput = document.getElementById('newCategoryInput');
+            var removeImageButton = document.getElementById('removeImageButton');
+            var imageContainer = document.getElementById('imageContainer');
+            var newImageSection = document.getElementById('newImageSection');
+            var removeImageInput = document.getElementById('removeImageInput');
+            var imageInput = document.getElementById('newImage');
     
-            categorySelect.addEventListener('change', function () {
-                newCategoryInput.style.display = categorySelect.value === 'new' ? 'block' : 'none';
+            // Show/hide elements based on whether an image exists
+            function toggleImageElements() {
+                if (imageContainer.querySelector('img')) {
+                    imageContainer.style.display = 'block';
+                    newImageSection.style.display = 'none';
+                } else {
+                    imageContainer.style.display = 'none';
+                    newImageSection.style.display = 'block';
+                }
+            }
+    
+            // Initial toggle
+            toggleImageElements();
+    
+            removeImageButton.addEventListener('click', function () {
+                // Set the value of the remove_image input to 1
+                removeImageInput.value = '1';
+    
+                // Clear the existing image preview
+                imageContainer.innerHTML = '';
+    
+                // Toggle image elements visibility
+                toggleImageElements();
+            });
+    
+            // Update image preview on new image selection
+            imageInput.addEventListener('change', function () {
+                // Clear the existing image preview
+                imageContainer.innerHTML = '';
+    
+                // Create a new image element
+                var newImage = document.createElement('img');
+                newImage.src = URL.createObjectURL(this.files[0]);
+                newImage.alt = 'New Image';
+                newImage.classList.add('img-thumbnail');
+    
+                // Append the new image to the container
+                imageContainer.appendChild(newImage);
+    
+                // Toggle image elements visibility
+                toggleImageElements();
             });
         });
-
-        
-        // Add event listener to the delete checkbox
-    document.getElementById('deleteImage').addEventListener('change', function () {
-        // Get the file input element
-        var newIconInput = document.getElementById('newIcon');
-
-        // Toggle the visibility of the file input based on the delete checkbox state
-        newIconInput.style.display = this.checked ? 'block' : 'none';
-    });
     </script>
 @endsection

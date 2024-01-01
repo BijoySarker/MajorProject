@@ -49,10 +49,11 @@ Route::get('/product/{product}/delete', [ProductController::class, 'destroy'])->
 Route::get('/category', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/category/create', [CategoryController::class, 'create'])->name('categories.create');
 Route::post('/category/store', [CategoryController::class, 'store'])->name('categories.store');
-Route::get('/category/{id}', [CategoryController::class, 'show'])->name('categories.show');
 Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
 Route::put('/category/{id}', [CategoryController::class, 'update'])->name('categories.update');
-Route::get('/category/{categoryChild}/delete', [CategoryController::class, 'destroy'])->name('categories.destroy');
+Route::get('/category/{categoryChild}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+Route::get('/categories/parent', [CategoryController::class, 'parentCategories'])->name('categories.parent');
+Route::delete('/categories/{category}', [CategoryController::class, 'delete'])->name('categories.delete');
 
 //Brand
 Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');

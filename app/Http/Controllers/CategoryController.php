@@ -18,12 +18,12 @@ class CategoryController extends Controller
 
 
     public function create()
-{
-    $categories = Category::all();
-    $childCategories = CategoryChild::paginate(20); // Adjust the number as needed
+    {
+        $categories = Category::all();
+        $childCategories = CategoryChild::paginate(20); // Adjust the number as needed
 
-    return view('category.create', compact('categories', 'childCategories'));
-}
+        return view('category.create', compact('categories', 'childCategories'));
+    }
 
 
     public function store(Request $request)
@@ -69,15 +69,7 @@ class CategoryController extends Controller
     
         $categoryChild->save();
     
-        return redirect()->route('categories.create')->with('success', 'Child Category created successfully.');
-    }
-
-
-    public function show($id)
-    {
-        $childCategory = CategoryChild::with('category')->findOrFail($id);
-
-        return view('category.show', compact('childCategory'));
+        return redirect()->route('categories.index')->with('success', 'Child Category created successfully.');
     }
 
 
@@ -90,58 +82,71 @@ class CategoryController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $request, CategoryChild $childCategory)
     {
         $request->validate([
             'category_id' => 'nullable|exists:categories,id',
-            'new_category_name' => 'nullable|string', // Add validation for new category name
-            'name' => 'required|string',
-            'status' => 'required|string',
-            'icon' => 'nullable|string',
-            'image' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif|max:2048', // Add validation for image
+            'new_category_name' => 'nullable|string',
+            'name' => 'sometimes|string',
+            'status' => 'sometimes|string',
+            'image' => 'sometimes|required|image|mimes:webp,jpeg,png,jpg,gif|max:2048',
         ]);
-    
-        $childCategory = CategoryChild::findOrFail($id);
-    
-        // Update the fields
-        $childCategory->category_id = $request->input('category_id');
-        $childCategory->name = $request->input('name');
-        $childCategory->status = $request->input('status');
-        $childCategory->image = $request->input('image');
-    
-        // Check if a new parent category name is provided
-        if ($request->filled('new_category_name')) {
-            // Update the parent category name
-            $childCategory->category->update([
-                'name' => $request->input('new_category_name'),
-            ]);
+
+        // Check if the image should be removed
+        if ($request->input('remove_image')) {
+            // Delete the old image if it exists
+            if ($childCategory->image) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $childCategory->image));
+            }
+
+            // Set the 'image' field to null in the database
+            $childCategory->update(['image' => null]);
         }
-    
+
         // Check if a new image is being uploaded
         if ($request->hasFile('image')) {
             // Delete the old image if it exists (optional)
             if ($childCategory->image) {
                 Storage::disk('public')->delete(str_replace('/storage/', '', $childCategory->image));
             }
-    
+
             // Upload the new image
             $fileName = time() . $request->file('image')->getClientOriginalName();
             $path = $request->file('image')->storeAs('categories', $fileName, 'public');
-    
-            // Update the 'image' field with the new path
-            $childCategory->image = '/storage/' . $path;
-        }
-    
-        $childCategory->save();
-    
-        return redirect()->route('categories.edit', $id)->with('success', 'Category updated successfully.');
-    }
 
+            // Update the 'image' field with the new path
+            $childCategory->update(['image' => '/storage/' . $path]);
+        }
+
+        // Update other fields
+        $childCategory->update([
+            'category_id' => $request->input('category_id'),
+            'name' => $request->input('name'),
+            'status' => $request->input('status'),
+        ]);
+
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
+    }
 
         public function destroy(CategoryChild $categoryChild)
     {
         $categoryChild->delete();
 
+        return redirect()->route('categories.index')->with('success', 'Category deleted successfully');
+    }
+
+    public function parentCategories()
+    {
+        $categories = Category::all();
+        return view('category.parentCategories', compact('categories'));
+    }
+
+    public function delete(Category $category)
+    {
+        // Delete the category
+        $category->delete();
+
+        // Redirect back to the index page with a success message
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully');
     }
 }

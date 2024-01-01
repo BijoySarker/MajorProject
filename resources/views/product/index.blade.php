@@ -61,20 +61,33 @@
         </thead>
         <tbody>
             @foreach ($products as $product)
-                <tr>
-                    <td>{{ ++$i }}</td>
-                    <td>{{ $product->product_name }}</td>
-                    <td>{{ $product->price }}</td>
-                    <td>{{ $product->category }}</td>
-                    <td><img src="{{ asset($product->brand) }}" alt="Brand Image" width="50" height="50"></td>
-                    <td>{{ $product->product_warranty }}</td>
-                    <td>
-                        <a class="btn btn-primary" href="{{ route('product.show', $product->id) }}">Show</a>
-                        <a class="btn btn-warning" href="{{ route('product.edit', $product->id) }}">Edit</a>
-                        <button class="btn btn-danger" onclick="confirmDelete('{{ $product->product_name }}', {{ $product->id }})">Delete</button>
-                    </td>
-                </tr>
-            @endforeach
+        <tr>
+        <td>{{ ++$i }}</td>
+        <td>{{ $product->product_name }}</td>
+        <td>{{ $product->price }}</td>
+        <td>{{ $product->category }}</td>
+        <td>
+            @if ($product->brand)
+                @php
+                    $brand = \App\Models\Brand::find($product->brand);
+                @endphp
+                @if ($brand && $brand->image)
+                    <img src="{{ asset($brand->image) }}" alt="Brand Image" width="50" height="50">
+                @else
+                    No Image
+                @endif
+            @else
+                No Brand
+            @endif
+        </td>
+        <td>{{ $product->product_warranty }}</td>
+        <td>
+            <a class="btn btn-primary" href="{{ route('product.show', $product->id) }}">Show</a>
+            <a class="btn btn-warning" href="{{ route('product.edit', $product->id) }}">Edit</a>
+            <a class="btn btn-danger" href="{{ route('product.destroy', $product->id) }}">Delete</a>
+        </td>
+        </tr>
+        @endforeach
         </tbody>
     </table>
 

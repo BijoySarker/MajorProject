@@ -12,4 +12,9 @@ class Product extends Model
     protected $fillable = [
         'product_name', 'price', 'category', 'brand', 'description', 'product_warranty'
     ];
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class)->withDefault(); // Add ->withDefault() to set default values for the relationship
+    }
 }

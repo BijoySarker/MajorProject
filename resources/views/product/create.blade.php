@@ -41,7 +41,12 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="category">Category:</label>
-                        <input type="text" name="category" class="form-control" placeholder="Category Name" required>
+                        <select name="category" class="form-control" required>
+                            <option value="" disabled selected>Select Category</option>
+                            @foreach ($childCategories as $category)
+                                <option value="{{ $category->name }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 

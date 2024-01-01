@@ -34,6 +34,7 @@
         </div>
         <div class="col-lg-6 text-right">
             <a class="btn btn-primary" href="{{ route('categories.create') }}">Create New Category</a>
+            <a class="btn btn-primary" href="{{ route('categories.parent') }}" >View All Parent Categories</a>
         </div>
     </div>
 
@@ -75,7 +76,6 @@
                         @endif
                     </td>
                     <td>
-                        <a class="btn btn-primary" href="{{ route('categories.show', $childCategory->id) }}">Show</a>
                         <a class="btn btn-warning" href="{{ route('categories.edit', $childCategory->id) }}">Edit</a>
                         <a class="btn btn-danger" href="{{ route('categories.destroy', $childCategory->id) }}">Delete</a>
                     </td>

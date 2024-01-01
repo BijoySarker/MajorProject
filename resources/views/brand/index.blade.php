@@ -50,7 +50,7 @@
             <tr>
                 <th scope="col">SI</th>
                 <th scope="col">Brand Name</th>
-                <th scope="col">Image</th>
+                <th scope="col">Logo</th>
                 <th scope="col" width="280px">Action</th>
             </tr>
         </thead>
@@ -61,7 +61,7 @@
                     <td>{{ $brand->name }}</td>
                     <td>
                         @if ($brand->image)
-                            <img src="{{ asset($brand->image) }}" alt="{{ $brand->name }}" width="50" height="50" class="img img-responsive">
+                            <img src="{{ asset($brand->image) }}" alt="{{ $brand->name }}" width="75" height="70" class="img img-responsive">
                         @else
                             No Image
                         @endif

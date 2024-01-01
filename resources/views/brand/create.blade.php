@@ -24,19 +24,18 @@
             @csrf
         
             <div class="row mt-3">
-                <div class="col-md-6">
+                <div class="mb-3">
                     <div class="form-group">
                         <label for="name">Brand Name:</label>
                         <input type="text" name="name" class="form-control" placeholder="Brand Name" required>
                     </div>
                 </div>
         
-                <div class="col-md-6">
+                <div class="mb-3">
                     <div class="form-group">
                         <label for="image">Upload Image:</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="image" name="image" required>
-                            <label class="custom-file-label" for="image">Choose file</label>
+                            <input type="file" class="form-control" aria-label="file example" id="image" name="image" required>
                         </div>
                     </div>
                 </div>
