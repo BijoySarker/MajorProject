@@ -51,9 +51,13 @@ class ProductController extends Controller
         return view('product.show', compact('product'));
     }
 
-    public function edit(Product $product)
+    public function edit($id)
     {
-        return view('product.edit', compact('product'));
+        $product = Product::find($id);
+        $childCategories = CategoryChild::all();
+        $brands = Brand::all();
+
+        return view('product.edit', compact('product', 'childCategories', 'brands'));
     }
 
     public function update(Request $request,  Product $product)

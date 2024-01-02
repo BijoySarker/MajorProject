@@ -38,25 +38,36 @@
                 {{ $product->product_name }}
             </div>
         </div>
-        <div class="col-md-4">
+
+        <div class="col-md-8 mt-3">
+            <div class="form-group">
+                <strong>Price:</strong>
+                &#2547;{{ number_format($product->price, 2) }}
+            </div>
+        </div>
+
+        <div class="col-md-4 mt-3">
             <div class="form-group">
                 <strong>Category:</strong>
                 {{ $product->category }}
             </div>
         </div>
-        <div class="col-md-4">
+
+        <div class="col-md-4 mt-3">
             <div class="form-group">
                 <strong>Brand:</strong>
-                {{ $product->brand }}
+                {{ App\Models\Brand::find($product->brand)->name }}
             </div>
         </div>
-        <div class="col-md-12">
+
+        <div class="col-md-12 mt-3">
             <div class="form-group">
                 <strong>Description:</strong>
                 {{ $product->description }}
             </div>
         </div>
-        <div class="col-md-12">
+        
+        <div class="col-md-12 mt-3">
             <div class="form-group">
                 <strong>Warranty:</strong>
                 {{ $product->product_warranty }}

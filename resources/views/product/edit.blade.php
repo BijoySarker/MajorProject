@@ -24,49 +24,63 @@
             @method('PUT')
 
             <div class="row mt-3">
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <div class="form-group">
                         <label for="product_name">Name:</label>
                         <input type="text" name="product_name" value="{{ old('product_name', $product->product_name) }}" class="form-control" placeholder="Change Product Name">
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <div class="form-group">
                         <label for="price">Price:</label>
                         <input type="text" name="price" value="{{ old('price', $product->price) }}" class="form-control" placeholder="Change Price">
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <div class="form-group">
                         <label for="category">Category:</label>
-                        <input type="text" name="category" value="{{ old('category', $product->category) }}" class="form-control" placeholder="Change Category Name">
+                        <select name="category" class="form-control" required>
+                            <option value="" disabled>Select Category</option>
+                            @foreach ($childCategories as $category)
+                                <option value="{{ $category->name }}" {{ $category->name == $product->category ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <div class="form-group">
                         <label for="brand">Brand:</label>
-                        <input type="text" name="brand" value="{{ old('brand', $product->brand) }}" class="form-control" placeholder="Change Brand Name">
+                        <select name="brand" class="form-control" required>
+                            <option value="" disabled>Select Brand</option>
+                            @foreach ($brands as $brand)
+                                <option value="{{ $brand->id }}" {{ $brand->id == $product->brand ? 'selected' : '' }}>
+                                    {{ $brand->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 mt-3">
                     <div class="form-group">
                         <label for="description">Description:</label>
                         <textarea class="form-control" style="height:150px" name="description" placeholder="Change Description">{{ $product->description }}</textarea>
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <div class="form-group">
                         <label for="product_warranty">Product Warranty:</label>
                         <input type="text" name="product_warranty" value="{{ old('product_warranty', $product->product_warranty) }}" class="form-control" placeholder="Change Warranty">
                     </div>
                 </div>
 
-                <div class="col-md-12 text-center">
+                <div class="col-md-12 text-center mt-3">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>

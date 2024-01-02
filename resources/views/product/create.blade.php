@@ -34,7 +34,12 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="price">Price:</label>
-                        <input type="text" name="price" class="form-control" placeholder="Price" required>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">&#2547;</span>
+                            </div>
+                            <input type="text" name="price" class="form-control" placeholder="Price" required>
+                        </div>
                     </div>
                 </div>
 
@@ -75,8 +80,8 @@
                         <input type="text" name="product_warranty" class="form-control" placeholder="Warranty" required>
                     </div>
                 </div>
-
-                <div class="col-md-12 text-center">
+                
+                <div class="col-md-12 text-center mt-3">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>

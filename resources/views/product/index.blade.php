@@ -55,7 +55,6 @@
                 <th scope="col">Price</th>
                 <th scope="col">Category</th>
                 <th scope="col">Brand</th>
-                <th scope="col">Warranty</th>
                 <th scope="col" width="280px">Action</th>
             </tr>
         </thead>
@@ -64,7 +63,9 @@
         <tr>
         <td>{{ ++$i }}</td>
         <td>{{ $product->product_name }}</td>
-        <td>{{ $product->price }}</td>
+        <td>
+            &#2547;{{ number_format($product->price, 2) }}
+        </td>
         <td>{{ $product->category }}</td>
         <td>
             @if ($product->brand)
@@ -80,7 +81,6 @@
                 No Brand
             @endif
         </td>
-        <td>{{ $product->product_warranty }}</td>
         <td>
             <a class="btn btn-primary" href="{{ route('product.show', $product->id) }}">Show</a>
             <a class="btn btn-warning" href="{{ route('product.edit', $product->id) }}">Edit</a>
