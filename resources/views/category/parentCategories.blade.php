@@ -15,11 +15,11 @@
     }
 </style>
     <div class="container mt-4">
-        <h2 class="mb-4">All Parent Categories</h2>
+        
 
         <div class="row">
             <div class="col-lg-12 d-flex justify-content-between align-items-center">
-                <h2>Add New Category</h2>
+                <h2 class="mb-4">All Parent Categories</h2>
                 <a class="btn btn-primary" href="{{ route('categories.index') }}">Back</a>
             </div>
         </div>
@@ -36,7 +36,7 @@
                     @foreach ($categories as $category)
                         <tr>
                             <td>
-                                <strong>{{ $category->name }}</strong>
+                                {{ $category->name }}
                             </td>
                             <td>
                                 <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Edit</a>

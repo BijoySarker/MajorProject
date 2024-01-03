@@ -51,8 +51,11 @@
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="status">status:</label>
-                        <input type="text" name="status" value="{{ old('category', $childCategory->status) }}" class="form-control">
+                        <label for="status">Status:</label>
+                        <select name="status" class="form-control">
+                            <option value="active" {{ old('status', $childCategory->status) == 'active' ? 'selected' : '' }}>Active</option>
+                            <option value="inactive" {{ old('status', $childCategory->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                        </select>
                     </div>
                 </div>
 

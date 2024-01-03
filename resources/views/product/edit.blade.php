@@ -19,7 +19,7 @@
             </div>
         @endif
 
-        <form action="{{ route('product.update',$product->id) }}" method="POST">
+        <form action="{{ route('product.update',$product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -80,10 +80,102 @@
                     </div>
                 </div>
 
+                <div class="col-md-6 mt-3">
+                    <div class="form-group">
+                        <label for="product_quantity">Quantity:</label>
+                        <input type="text" name="product_quantity" value="{{ old('product_quantity', $product->product_quantity) }}" class="form-control" placeholder="Change Quantity">
+                    </div>
+                </div>
+
+                <div class="col-md-12 mt-3">
+                    <div class="form-group">
+                        <label for="product_specifications">Specifications:</label>
+                        <textarea class="form-control" style="height:150px" name="product_specifications" placeholder="Change Specifications">{{ $product->product_specifications }}</textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="image">Image:</label>
+                        <div id="imageContainer" class="mb-3">
+                            @if ($product->product_image)
+                                <img src="{{ asset($product->product_image) }}" alt="Current Image" class="img-thumbnail">
+                                <button type="button" class="btn btn-danger mt-2" id="removeImageButtonImage">Remove Image</button>
+                                <input type="hidden" name="removed_images" id="removedImagesInput" value="">
+                            @endif
+                        </div>
+                        <div id="newImageSection" style="display:none;">
+                            <input type="file" name="image" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="product_gallery">Gallery Images:</label>
+                        <div id="imageContainerGallery" class="mb-3">
+                            @if ($product->product_gallery)
+                                @foreach ($product->product_gallery as $index => $galleryImage)
+                                    <div>
+                                        <img src="{{ asset($galleryImage) }}" alt="Gallery Image" class="img-thumbnail">
+                                        <button type="button" class="btn btn-danger mt-2 remove-gallery-image" data-image-path="{{ $galleryImage }}">Remove Image</button>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                        <div id="newImageSectionGallery" style="display:none;">
+                            <input type="file" name="product_gallery[]" class="form-control" multiple>
+                        </div>
+                    </div>
+                </div>
+                
+
                 <div class="col-md-12 text-center mt-3">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
         </form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var removeImageButtonImage = document.getElementById('removeImageButtonImage');
+            var imageContainer = document.getElementById('imageContainer');
+            var newImageSection = document.getElementById('newImageSection');
+            var removeImageInputImage = document.getElementById('removeImageInputImage');
+    
+            removeImageButtonImage.addEventListener('click', function () {
+                imageContainer.style.display = 'none';
+                newImageSection.style.display = 'block';
+                removeImageInputImage.value = '1';
+            });
+    
+            function removeImageGallery(imagePath, index) {
+                // Uncomment the next line if you want to keep the confirmation prompt
+                // if (!confirm('Are you sure you want to remove this gallery image?')) return;
+    
+                let removedImagesInput = document.getElementById('removed_images');
+                if (!removedImagesInput) {
+                    removedImagesInput = document.createElement('input');
+                    removedImagesInput.type = 'hidden';
+                    removedImagesInput.name = 'removed_images';
+                    removedImagesInput.id = 'removed_images';
+                    document.querySelector('form').appendChild(removedImagesInput);
+                }
+                removedImagesInput.value += imagePath + ',';
+    
+                let imageContainerGallery = document.querySelector(`[src="${imagePath}"]`).parentNode;
+                imageContainerGallery.parentNode.removeChild(imageContainerGallery);
+            }
+    
+            // Attach event listeners to all remove buttons in the gallery
+            document.querySelectorAll('.remove-gallery-image').forEach(function(button, index) {
+                button.addEventListener('click', function() {
+                    // Get the image path from the data attribute
+                    var imagePath = button.getAttribute('data-image-path');
+                    // Call the removeImageGallery function
+                    removeImageGallery(imagePath, index);
+                });
+            });
+        });
+    </script>
 @endsection

@@ -2,27 +2,28 @@
 @section('title', 'Products')
 @section('content')
 
-
-
 <style>
-        /* Add your custom styling here */
+    .container {
+        margin-top: 20px;
+    }
 
-        .container {
-            margin-top: 20px;
-        }
+    .table {
+        margin-top: 20px;
+    }
 
-        .table {
-            margin-top: 20px;
-        }
+    .alert {
+        margin-top: 20px;
+    }
 
-        .alert {
-            margin-top: 20px;
-        }
+    .btn-create {
+        margin-top: 20px;
+    }
 
-        .btn-create {
-            margin-top: 20px;
-        }
-    </style>
+    .product-image {
+        width: 50px;
+        height: 50px;
+    }
+</style>
 
 <div class="container mt-4">
     <div class="row">
@@ -51,7 +52,8 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">SI</th>
-                <th scope="col">Product Name</th>
+                <th scope="col">Product</th>
+                <th scope="col">Quantity</th>
                 <th scope="col">Price</th>
                 <th scope="col">Category</th>
                 <th scope="col">Brand</th>
@@ -60,34 +62,41 @@
         </thead>
         <tbody>
             @foreach ($products as $product)
-        <tr>
-        <td>{{ ++$i }}</td>
-        <td>{{ $product->product_name }}</td>
-        <td>
-            &#2547;{{ number_format($product->price, 2) }}
-        </td>
-        <td>{{ $product->category }}</td>
-        <td>
-            @if ($product->brand)
-                @php
+            <tr>
+                <td>{{ ++$i }}</td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        @if ($product->product_image)
+                        <img src="{{ asset($product->product_image) }}" alt="Product Image" class="product-image mr-3">
+                        @endif
+                        <span>{{ $product->product_name }}</span>
+                    </div>
+                </td>
+                <td>{{ $product->product_quantity }}</td>
+                <td>&#2547;{{ number_format($product->price, 2) }}</td>
+                <td>{{ $product->category }}</td>
+                <td>
+                    @if ($product->brand)
+                    @php
                     $brand = \App\Models\Brand::find($product->brand);
-                @endphp
-                @if ($brand && $brand->image)
-                    <img src="{{ asset($brand->image) }}" alt="Brand Image" width="50" height="50">
-                @else
+                    @endphp
+                    @if ($brand && $brand->image)
+                    <img src="{{ asset($brand->image) }}" alt="Brand Image" class="product-image">
+                    @else
                     No Image
-                @endif
-            @else
-                No Brand
-            @endif
-        </td>
-        <td>
-            <a class="btn btn-primary" href="{{ route('product.show', $product->id) }}">Show</a>
-            <a class="btn btn-warning" href="{{ route('product.edit', $product->id) }}">Edit</a>
-            <a class="btn btn-danger" href="{{ route('product.destroy', $product->id) }}">Delete</a>
-        </td>
-        </tr>
-        @endforeach
+                    @endif
+                    @else
+                    No Brand
+                    @endif
+                </td>
+                <td>
+                    <a class="btn btn-primary" href="{{ route('product.show', $product->id) }}">Show</a>
+                    <a class="btn btn-warning" href="{{ route('product.edit', $product->id) }}">Edit</a>
+                    <a class="btn btn-danger" href="{{ route('product.destroy', $product->id) }}"
+                        onclick="confirmDelete('{{ $product->product_name }}', '{{ $product->id }}')">Delete</a>
+                </td>
+            </tr>
+            @endforeach
         </tbody>
     </table>
 
@@ -99,11 +108,4 @@
 @endsection
 
 @section('scripts')
-    <script>
-        function confirmDelete(productName, productId) {
-            if (confirm('Are you sure you want to delete ' + productName + '?')) {
-                window.location.href = '/products/destroy/' + productId;
-            }
-        }
-    </script>
 @endsection

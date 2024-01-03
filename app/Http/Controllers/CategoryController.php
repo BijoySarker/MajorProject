@@ -88,37 +88,29 @@ class CategoryController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'new_category_name' => 'nullable|string',
             'name' => 'sometimes|string',
-            'status' => 'sometimes|string',
+            'status' => 'sometimes|in:active,inactive',
             'image' => 'sometimes|required|image|mimes:webp,jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Check if the image should be removed
         if ($request->input('remove_image')) {
-            // Delete the old image if it exists
             if ($childCategory->image) {
                 Storage::disk('public')->delete(str_replace('/storage/', '', $childCategory->image));
             }
 
-            // Set the 'image' field to null in the database
             $childCategory->update(['image' => null]);
         }
 
-        // Check if a new image is being uploaded
         if ($request->hasFile('image')) {
-            // Delete the old image if it exists (optional)
             if ($childCategory->image) {
                 Storage::disk('public')->delete(str_replace('/storage/', '', $childCategory->image));
             }
 
-            // Upload the new image
             $fileName = time() . $request->file('image')->getClientOriginalName();
             $path = $request->file('image')->storeAs('categories', $fileName, 'public');
 
-            // Update the 'image' field with the new path
             $childCategory->update(['image' => '/storage/' . $path]);
         }
 
-        // Update other fields
         $childCategory->update([
             'category_id' => $request->input('category_id'),
             'name' => $request->input('name'),
