@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthManager;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ForgetPasswordManager;
 use App\Http\Controllers\ProductController;
 use Illuminate\Auth\Events\Login;
@@ -62,3 +63,12 @@ Route::post('/brand//store', [BrandController::class, 'store'])->name('brand.sto
 Route::get('/brand/{brand}/edit', [BrandController::class, 'edit'])->name('brand.edit');
 Route::put('/brand/{brand}', [BrandController::class, 'update'])->name('brand.update');
 Route::get('/brand/{brand}/delete', [BrandController::class, 'destroy'])->name('brand.destroy');
+
+//Customer
+Route::get('/customer', [CustomerController::class, 'index'])->name('customer.index');
+Route::get('/customer/create', [CustomerController::class, 'create'])->name('customer.create');
+Route::post('/customer/store', [CustomerController::class, 'store'])->name('customer.store');
+Route::get('/customer/{customer}', [CustomerController::class, 'show'])->name('customer.show');
+Route::get('/customer/{customer}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
+Route::put('/customer/{customer}', [CustomerController::class, 'update'])->name('customer.update');
+Route::get('/customer/{customer}/delete', [CustomerController::class, 'destroy'])->name('customer.destroy');
