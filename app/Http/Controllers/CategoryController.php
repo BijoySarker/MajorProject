@@ -20,7 +20,7 @@ class CategoryController extends Controller
     public function create()
     {
         $categories = Category::all();
-        $childCategories = CategoryChild::paginate(20); // Adjust the number as needed
+        $childCategories = CategoryChild::paginate(20);
 
         return view('category.create', compact('categories', 'childCategories'));
     }
@@ -54,7 +54,6 @@ class CategoryController extends Controller
         } elseif ($request->filled('category_id')) {
             $categoryChild->category_id = $request->input('category_id');
         } else {
-            // Handle the case when no category is selected or provided
             return redirect()->back()->with('error', 'Please select or add a valid parent category.');
         }
     
@@ -63,8 +62,7 @@ class CategoryController extends Controller
             $path = $request->file('image')->storeAs('categories', $fileName, 'public');
             $categoryChild->image = '/storage/' . $path;
         } else {
-            // Handle the case where no file is uploaded (optional)
-            $categoryChild->image = null; // Or provide a default image path
+            $categoryChild->image = null;
         }
     
         $categoryChild->save();
@@ -135,10 +133,8 @@ class CategoryController extends Controller
 
     public function delete(Category $category)
     {
-        // Delete the category
         $category->delete();
 
-        // Redirect back to the index page with a success message
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully');
     }
 }

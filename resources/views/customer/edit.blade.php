@@ -24,7 +24,7 @@
 
         <form action="{{ route('customer.update', $customer->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT') {{-- Use 'PUT' method for update --}}
+            @method('PUT')
         
             <div class="row mt-3">
                 <div class="col-md-6 mb-3">
@@ -73,7 +73,26 @@
                     </div>
                 </div>
 
-                <!-- Other form fields... -->
+                <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                        <label for="customer_name">Customer Email:</label>
+                        <input type="text" name="customer_email" class="form-control" value="{{ $customer->customer_email }}" required>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                        <label for="customer_name">Customer Address:</label>
+                        <input type="text" name="customer_address" class="form-control" value="{{ $customer->customer_address }}" required>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                        <label for="customer_name">Customer Postal Code:</label>
+                        <input type="text" name="customer_postal_code" class="form-control" value="{{ $customer->customer_postal_code }}" required>
+                    </div>
+                </div>
 
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
@@ -81,7 +100,16 @@
                         <select name="customer_city" class="form-control" required>
                             <option value="" disabled>Select City</option>
                             <option value="Dhaka" {{ $customer->customer_city === 'Dhaka' ? 'selected' : '' }}>Dhaka</option>
-                            <!-- Other city options... -->
+                            <option value="Chattogram" {{ $customer->customer_city === 'Chattogram' ? 'selected' : '' }}>Chattogram</option>
+                            <option value="Khulna" {{ $customer->customer_city === 'Khulna' ? 'selected' : '' }}>Khulna</option>
+                            <option value="Rajshahi" {{ $customer->customer_city === 'Rajshahi' ? 'selected' : '' }}>Rajshahi</option>
+                            <option value="Gazipur" {{ $customer->customer_city === 'Gazipur' ? 'selected' : '' }}>Gazipur</option>
+                            <option value="Sylhet" {{ $customer->customer_city === 'Sylhet' ? 'selected' : '' }}>Sylhet</option>
+                            <option value="Mymensingh" {{ $customer->customer_city === 'Mymensingh' ? 'selected' : '' }}>Mymensingh</option>
+                            <option value="Rangpur" {{ $customer->customer_city === 'Rangpur' ? 'selected' : '' }}>Rangpur</option>
+                            <option value="Cumilla" {{ $customer->customer_city === 'Cumilla' ? 'selected' : '' }}>Cumilla</option>
+                            <option value="Barisal" {{ $customer->customer_city === 'Barisal' ? 'selected' : '' }}>Barisal</option>
+                            <option value="Narayanganj" {{ $customer->customer_city === 'Narayanganj' ? 'selected' : '' }}>Narayanganj</option>
                         </select>
                     </div>
                 </div>
