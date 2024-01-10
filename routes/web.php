@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ForgetPasswordManager;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\QuotationController;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Route;
 
@@ -59,7 +60,7 @@ Route::delete('/categories/{category}', [CategoryController::class, 'delete'])->
 //Brand
 Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
 Route::get('/brand/create', [BrandController::class, 'create'])->name('brand.create');
-Route::post('/brand//store', [BrandController::class, 'store'])->name('brand.store');
+Route::post('/brand/store', [BrandController::class, 'store'])->name('brand.store');
 Route::get('/brand/{brand}/edit', [BrandController::class, 'edit'])->name('brand.edit');
 Route::put('/brand/{brand}', [BrandController::class, 'update'])->name('brand.update');
 Route::get('/brand/{brand}/delete', [BrandController::class, 'destroy'])->name('brand.destroy');
@@ -72,3 +73,7 @@ Route::get('/customer/{customer}', [CustomerController::class, 'show'])->name('c
 Route::get('/customer/{customer}/edit', [CustomerController::class, 'edit'])->name('customer.edit');
 Route::put('/customer/{customer}', [CustomerController::class, 'update'])->name('customer.update');
 Route::get('/customer/{customer}/delete', [CustomerController::class, 'destroy'])->name('customer.destroy');
+
+//quotation routes start
+Route::get('/quotation', [QuotationController::class, 'create'])->name('quotation.create');
+Route::post('/quotation/store', [QuotationController::class, 'store'])->name('quotation.store');

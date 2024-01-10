@@ -80,7 +80,7 @@ function myAccFunc() {
         <ul class="sub-menu">
           <li><a class="link_name" href="{{ route('customer.index') }}">Customer</a></li>
           <li><a href="{{ route('customer.index') }}">Customer List</a></li>
-          <li><a href="#">Login Form</a></li>
+          <li><a href="{{ route('quotation.create') }}">Quotation Create</a></li>
           <li><a href="#">Card Design</a></li>
         </ul>
       </li>
