@@ -25,5 +25,13 @@ class Quotation extends Model
         'attention_quot',
         'dear_sir',
         'quotation_body',
+        'products'
+    ];
+    
+    // If you want to cast the 'products' attribute to an array automatically
+    protected $casts = [
+        'quantity' => 'array',
+        'unit_price' => 'array',
+        'product_id' => 'array',
     ];
 }

@@ -77,3 +77,5 @@ Route::get('/customer/{customer}/delete', [CustomerController::class, 'destroy']
 //quotation routes start
 Route::get('/quotation', [QuotationController::class, 'create'])->name('quotation.create');
 Route::post('/quotation/store', [QuotationController::class, 'store'])->name('quotation.store');
+Route::get('/search-products', [ProductController::class, 'search'])->name('search-products');
+Route::get('/get-product-details', [QuotationController::class, 'getProductDetails'])->name('get-product-details');

@@ -9,6 +9,9 @@
 
     <!-- CKEditor -->
     <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+    
+    
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <style>
         .navbar {
@@ -71,7 +74,7 @@
         @yield('dashboard')
     @endauth
 
-    <div class="container">
+    <div>
       @yield('content')
       @yield('scripts')
     </div>

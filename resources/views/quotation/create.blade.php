@@ -1,30 +1,100 @@
 @extends('layout')
-
+@section('title', 'Quotation Create')
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Create Quotation</div>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+                    <h2 class="mb-0">Create Quotation</h2>
+        </div>
+                <div class="card-body">
+                    @if(session('success'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('success') }}
+                        </div>
+                    @endif
 
-                    <div class="card-body">
-                        @if(session('success'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('success') }}
-                            </div>
-                        @endif
+                    <form method="POST" action="{{ route('quotation.store') }}">
+                        @csrf
 
-                        <form method="POST" action="{{ route('quotation.store') }}">
-                            @csrf
+                        <div class="custom-form-group">
+                            <label for="quotation_number">Quotation Number</label>
+                            <input type="text" class="form-control custom-input" id="quotation_number" name="quotation_number" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden" name="product_id[]" id="product_id">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="product_search">Product Search:</label>
+                            <input type="text" class="form-control" id="product_search" placeholder="Search for products">
+                            <ul id="product_results" class="list-group"></ul>
+                        </div>
+
+                        <div class="form-group">
+                            <table class="table table-bordered" id="selected_products_table">
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Product Image</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Price</th>
+                                        <th>Price</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="selected_products_body"></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4" class="text-end">Total:</td>
+                                        <td id="total_price">0.00</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quotation_type">Select Quotation Type:</label>
+                            <select name="quotation_type" id="quotation_type" class="form-control">
+                                <option value="0">Dealer</option>
+                                <option value="1">Corporate</option>
+                            </select>
+                        </div>
 
                             <div class="form-group">
-                                <label for="quotation_number">Quotation Number</label>
-                                <input type="text" class="form-control" id="quotation_number" name="quotation_number" required>
+                                <label for="company_persons">Enter Company Persons:</label>
+                                <input type="text" name="company_persons" id="company_persons" class="form-control">
                             </div>
-
+                            
                             <div class="form-group">
-                                <label for="product_id">Product ID</label>
-                                <input type="text" class="form-control" id="product_id" name="product_id" required>
+                                <label for="company_name">Enter Company Name:</label>
+                                <input type="text" name="company_name" id="company_name" class="form-control">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="company_address">Enter Company Address:</label>
+                                <input type="text" name="company_address" id="company_address" class="form-control">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="quotation_subject">Enter Subject:</label>
+                                <input type="text" name="quotation_subject" id="quotation_subject" class="form-control">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="attention_quot">Enter Attention:</label>
+                                <input type="text" name="attention_quot" id="attention_quot" class="form-control">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="dear_sir">Dear Sir:</label>
+                                <input type="text" name="dear_sir" id="dear_sir" class="form-control">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="quotation_body">Enter Quotation Body:</label>
+                                <textarea name="quotation_body" id="quotation_body" class="form-control"></textarea>
                             </div>
 
                             <div class="form-group">
@@ -32,21 +102,118 @@
                                 <textarea id="terms_and_condition" name="terms_and_condition"></textarea>
                             </div>
 
-                            <!-- Add other form fields based on your Quotation model -->
-
-                            <button type="submit" class="btn btn-primary">
-                                Create Quotation
-                            </button>
-                        </form>
-                    </div>
+                        <button type="submit" class="btn btn-primary">Create Quotation</button>
+                    </form>
                 </div>
-            </div>
-        </div>
     </div>
+</div>
 
-    <script>
-        CKEDITOR.replace('terms_and_condition', {
-          placeholder: 'Enter your text here...',
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        CKEDITOR.replace('terms_and_condition');
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#product_search').on('input', function () {
+            var query = $(this).val();
+
+            if (query.length >= 3) {
+                $.ajax({
+                    url: '/search-products',
+                    method: 'GET',
+                    data: { query: query },
+                    success: function (data) {
+                        $('#product_results').html(data);
+                    }
+                });
+            }
         });
-      </script>
+
+        $('#product_results').on('click', '.list-group-item', function () {
+        var productId = $(this).data('product-id');
+        var productName = $(this).data('product-name');
+
+        $.ajax({
+            url: '/get-product-details',
+            method: 'GET',
+            data: { productId: productId },
+            success: function (productDetails) {
+                // Update form fields with selected product details
+                var existingIds = $('#product_id').val() ? JSON.parse($('#product_id').val()) : [];
+                existingIds.push(productId);
+
+                $('#product_id').val(JSON.stringify(existingIds));
+
+                $('#selected_products_body').append(`
+                    <tr data-product-id="${productId}">
+                        <td>${productName}</td>
+                        <td><img src="${productDetails.image}" alt="${productName}" style="max-width: 100px;"></td>
+                        <td><input type="number" name="quantity[]" class="form-control quantity" required></td>
+                        <td><input type="number" name="unit_price[]" class="form-control unit-price" value="${productDetails.price}" required></td>
+                        <td class="price">0</td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="removeProduct(${productId})">Remove</button></td>
+                    </tr>
+                `);
+            }
+        });
+    });
+
+        // Remove selected product
+        $('#selected_products_body').on('click', 'button.btn-danger', function () {
+            var productId = $(this).closest('tr').data('product-id');
+            removeProduct(productId);
+            updateTotalPrice();
+        });
+
+        // Update total price on quantity or unit price change
+        $('#selected_products_body').on('input', '.quantity, .unit-price', function () {
+            updateTotalPrice();
+        });
+    });
+
+    function removeProduct(productId) {
+        $('[data-product-id="' + productId + '"]').remove();
+    }
+
+    function updateTotalPrice() {
+        var total = 0;
+        $('#selected_products_body tr').each(function () {
+            var quantity = $(this).find('.quantity').val();
+            var unitPrice = $(this).find('.unit-price').val();
+            var price = quantity * unitPrice;
+            total += price;
+            $(this).find('.price').text(price);
+        });
+
+        // Update total price in the last row
+        $('#total_price').text(total);
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function generateQuotationNumber() {
+            var randomNumber = Math.floor(100000 + Math.random() * 900000);
+            var quotationNumber = "MP" + randomNumber;
+            return quotationNumber;
+        }
+
+        document.getElementById('quotation_number').value = generateQuotationNumber();
+    });
+</script>
+
+<style>
+    .custom-form-group {
+        width: 200px; /* Adjust the width as needed */
+        margin-bottom: 10px; /* Adjust the margin as needed */
+    }
+
+    .custom-input {
+        width: 100%; /* Make the input box fill the width of the form-group */
+        height: 30px; /* Adjust the height as needed */
+    }
+</style>
+
+
 @endsection

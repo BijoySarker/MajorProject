@@ -19,19 +19,25 @@ class QuotationController extends Controller
     {
         // Validate the request data
         $request->validate([
-            // Add your validation rules here based on your requirements
             'quotation_number' => 'required|unique:quotations',
-            'product_id' => 'required',
+            'product_id' => 'required|array', // Ensure product_id is an array
+            'quantity' => 'required|array',
+            'unit_price' => 'required|array',
+            'quotation_type' => 'required',
             // Add other fields and validation rules as needed
         ]);
+
+        // Convert arrays to JSON before storing
+        $quantityJson = json_encode($request->input('quantity'));
+        $unitPriceJson = json_encode($request->input('unit_price'));
 
         // Create a new quotation
         $quotation = new Quotation([
             'quotation_number' => $request->input('quotation_number'),
-            'product_id' => $request->input('product_id'),
+            'product_id' => json_encode($request->input('product_id')), // Convert product_id array to JSON
             'terms_and_condition' => $request->input('terms_and_condition'),
             'quantity' => $request->input('quantity'),
-            'product_price' => $request->input('product_price'),
+            'unit_price' => $request->input('unit_price'),
             'quotation_type' => $request->input('quotation_type'),
             'company_name' => $request->input('company_name'),
             'company_address' => $request->input('company_address'),
@@ -48,5 +54,17 @@ class QuotationController extends Controller
 
         // Redirect to a success page or do whatever is appropriate for your application
         return redirect()->route('quotation.create')->with('success', 'Quotation created successfully!');
+    }
+
+    public function getProductDetails(Request $request)
+    {
+        $productId = $request->input('productId');
+        $product = Product::find($productId);
+
+        return response()->json([
+            'product_specification' => $product->product_specifications,
+            'image' => $product->product_image,
+            'price' => $product->price,
+        ]);
     }
 }
