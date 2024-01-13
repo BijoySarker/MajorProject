@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Product;
 use App\Models\Quotation;
 use Auth;
@@ -20,7 +19,7 @@ class QuotationController extends Controller
         // Validate the request data
         $request->validate([
             'quotation_number' => 'required|unique:quotations',
-            'product_id' => 'required|array', // Ensure product_id is an array
+            'product_id' => 'required|array',
             'quantity' => 'required|array',
             'unit_price' => 'required|array',
             'quotation_type' => 'required',
@@ -31,13 +30,17 @@ class QuotationController extends Controller
         $quantityJson = json_encode($request->input('quantity'));
         $unitPriceJson = json_encode($request->input('unit_price'));
 
-        // Create a new quotation
+        // Calculate total price
+        $totalPrice = array_sum(array_map(function ($quantity, $unitPrice) {
+            return $quantity * $unitPrice;
+        }, $request->input('quantity'), $request->input('unit_price')));
+
         $quotation = new Quotation([
             'quotation_number' => $request->input('quotation_number'),
             'product_id' => json_encode($request->input('product_id')), // Convert product_id array to JSON
             'terms_and_condition' => $request->input('terms_and_condition'),
-            'quantity' => $request->input('quantity'),
-            'unit_price' => $request->input('unit_price'),
+            'quantity' => $quantityJson,
+            'unit_price' => $unitPriceJson,
             'quotation_type' => $request->input('quotation_type'),
             'company_name' => $request->input('company_name'),
             'company_address' => $request->input('company_address'),
@@ -47,14 +50,14 @@ class QuotationController extends Controller
             'attention_quot' => $request->input('attention_quot'),
             'dear_sir' => $request->input('dear_sir'),
             'quotation_body' => $request->input('quotation_body'),
+            'product_price' => $totalPrice,
         ]);
 
-        // Save the quotation
         $quotation->save();
 
-        // Redirect to a success page or do whatever is appropriate for your application
         return redirect()->route('quotation.create')->with('success', 'Quotation created successfully!');
     }
+
 
     public function getProductDetails(Request $request)
     {
@@ -66,5 +69,19 @@ class QuotationController extends Controller
             'image' => $product->product_image,
             'price' => $product->price,
         ]);
+    }
+
+    public function index()
+    {
+        $quotations = Quotation::paginate(20);
+
+        return view('quotation.index', compact('quotations'));
+    }
+
+    public function destroy(Quotation $quotation)
+    {
+        $quotation->delete();
+
+        return redirect()->route('quotation.index')->with('success', 'Quotation deleted successfully');
     }
 }

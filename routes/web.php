@@ -75,7 +75,10 @@ Route::put('/customer/{customer}', [CustomerController::class, 'update'])->name(
 Route::get('/customer/{customer}/delete', [CustomerController::class, 'destroy'])->name('customer.destroy');
 
 //quotation routes start
-Route::get('/quotation', [QuotationController::class, 'create'])->name('quotation.create');
+Route::get('/quotation/create', [QuotationController::class, 'create'])->name('quotation.create');
 Route::post('/quotation/store', [QuotationController::class, 'store'])->name('quotation.store');
 Route::get('/search-products', [ProductController::class, 'search'])->name('search-products');
 Route::get('/get-product-details', [QuotationController::class, 'getProductDetails'])->name('get-product-details');
+Route::get('/quotation', [QuotationController::class, 'index'])->name('quotation.index');
+Route::get('/quotation/{quotaion}', [QuotationController::class, 'show'])->name('quotation.show');
+Route::get('/product/{quotation}/delete', [QuotationController::class, 'destroy'])->name('quotation.destroy');

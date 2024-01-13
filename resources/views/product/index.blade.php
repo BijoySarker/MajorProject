@@ -92,8 +92,7 @@
                 <td>
                     <a class="btn btn-primary" href="{{ route('product.show', $product->id) }}">Show</a>
                     <a class="btn btn-warning" href="{{ route('product.edit', $product->id) }}">Edit</a>
-                    <a class="btn btn-danger" href="{{ route('product.destroy', $product->id) }}"
-                        onclick="confirmDelete('{{ $product->product_name }}', '{{ $product->id }}')">Delete</a>
+                    <a class="btn btn-danger" href="{{ route('product.destroy', $product->id) }}">Delete</a>
                 </td>
             </tr>
             @endforeach

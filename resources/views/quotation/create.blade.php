@@ -1,17 +1,24 @@
 @extends('layout')
 @section('title', 'Quotation Create')
 @section('content')
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-                    <h2 class="mb-0">Create Quotation</h2>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-12 d-flex justify-content-between align-items-center">
+                <h2>Add New Quotation</h2>
+                <a class="btn btn-primary" href="{{ route('quotation.index') }}">Back</a>
+            </div>
         </div>
-                <div class="card-body">
-                    @if(session('success'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger mt-3">
+                <strong>Error!</strong> <br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
                     <form method="POST" action="{{ route('quotation.store') }}">
                         @csrf
@@ -132,33 +139,36 @@
         });
 
         $('#product_results').on('click', '.list-group-item', function () {
-        var productId = $(this).data('product-id');
-        var productName = $(this).data('product-name');
+            var productId = $(this).data('product-id');
+            var productName = $(this).data('product-name');
 
-        $.ajax({
-            url: '/get-product-details',
-            method: 'GET',
-            data: { productId: productId },
-            success: function (productDetails) {
-                // Update form fields with selected product details
-                var existingIds = $('#product_id').val() ? JSON.parse($('#product_id').val()) : [];
-                existingIds.push(productId);
+            $.ajax({
+                url: '/get-product-details',
+                method: 'GET',
+                data: { productId: productId },
+                success: function (productDetails) {
+                    // Update form fields with selected product details
+                    var existingIds = $('#product_id').val() ? JSON.parse($('#product_id').val()) : [];
+                    existingIds.push(productId);
 
-                $('#product_id').val(JSON.stringify(existingIds));
+                    $('#product_id').val(JSON.stringify(existingIds));
+                    
+                    // Convert the stored JSON string to an array
+                    var storedIdsArray = JSON.parse($('#product_id').val());
 
-                $('#selected_products_body').append(`
-                    <tr data-product-id="${productId}">
-                        <td>${productName}</td>
-                        <td><img src="${productDetails.image}" alt="${productName}" style="max-width: 100px;"></td>
-                        <td><input type="number" name="quantity[]" class="form-control quantity" required></td>
-                        <td><input type="number" name="unit_price[]" class="form-control unit-price" value="${productDetails.price}" required></td>
-                        <td class="price">0</td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="removeProduct(${productId})">Remove</button></td>
-                    </tr>
-                `);
-            }
+                    $('#selected_products_body').append(`
+                        <tr data-product-id="${productId}">
+                            <td>${productName}</td>
+                            <td><img src="${productDetails.image}" alt="${productName}" style="max-width: 100px;"></td>
+                            <td><input type="number" name="quantity[]" class="form-control quantity" required></td>
+                            <td><input type="number" name="unit_price[]" class="form-control unit-price" value="${productDetails.price}" required></td>
+                            <td class="price">0</td>
+                            <td><button type="button" class="btn btn-danger btn-sm" onclick="removeProduct(${productId})">Remove</button></td>
+                        </tr>
+                    `);
+                }
+            });
         });
-    });
 
         // Remove selected product
         $('#selected_products_body').on('click', 'button.btn-danger', function () {
@@ -180,15 +190,15 @@
     function updateTotalPrice() {
         var total = 0;
         $('#selected_products_body tr').each(function () {
-            var quantity = $(this).find('.quantity').val();
-            var unitPrice = $(this).find('.unit-price').val();
+            var quantity = parseFloat($(this).find('.quantity').val());
+            var unitPrice = parseFloat($(this).find('.unit-price').val());
             var price = quantity * unitPrice;
             total += price;
-            $(this).find('.price').text(price);
+            $(this).find('.price').text(price.toFixed(2));
         });
 
         // Update total price in the last row
-        $('#total_price').text(total);
+        $('#total_price').text(total.toFixed(2));
     }
 </script>
 <script>
@@ -205,13 +215,13 @@
 
 <style>
     .custom-form-group {
-        width: 200px; /* Adjust the width as needed */
-        margin-bottom: 10px; /* Adjust the margin as needed */
+        width: 200px;
+        margin-bottom: 10px;
     }
 
     .custom-input {
-        width: 100%; /* Make the input box fill the width of the form-group */
-        height: 30px; /* Adjust the height as needed */
+        width: 100%;
+        height: 30px;
     }
 </style>
 
