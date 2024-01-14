@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Quotation extends Model
 {
-    use SoftDeletes;
 
+    use HasFactory;
+    
     protected $fillable = [
         'quotation_number',
         'product_id',
@@ -28,10 +28,26 @@ class Quotation extends Model
         'products'
     ];
     
-    // If you want to cast the 'products' attribute to an array automatically
     protected $casts = [
         'quantity' => 'array',
         'unit_price' => 'array',
         'product_id' => 'array',
     ];
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class)->withPivot('quantity', 'unit_price');
+    }
+
+    public function getTotalPriceAttribute()
+    {
+        return $this->products->sum(function ($product) {
+            return $product->pivot->quantity * $product->pivot->unit_price;
+        });
+    }
+    
+    public function getProductIdsAttribute()
+    {
+        return $this->product_id ? json_decode($this->product_id, true) : [];
+    }
 }

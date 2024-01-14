@@ -53,6 +53,8 @@
             <tr>
                 <th scope="col">SI</th>
                 <th scope="col">Quotation Number</th>
+                <th scope="col">Company Persons</th>
+                <th scope="col">Company Name</th>
                 <th scope="col">Total Products</th>
                 <th scope="col">Total Price</th>
                 <th scope="col" width="280px">Action</th>
@@ -64,18 +66,24 @@
                 <tr>
                     <td>{{ $serialNumber++ }}</td>
                     <td>{{ $quotation->quotation_number }}</td>
+                    <td>{{ $quotation->company_persons }}</td>
+                    <td>{{ $quotation->company_name }}</td>
                     <td>
-                         @if ($quotation->product_id)
-                             {{ json_encode($quotation->product_id) }}
-                         @else
-                             No Products
-                         @endif
-                     </td>
-                     <td>{{ $quotation->product_price }}</td>
+                        @if ($quotation->product_id)
+                            {{ count(json_decode(json_decode($quotation->product_id)[0])) }}
+                        @else
+                            No Products
+                        @endif
+                    </td>
+                    <td>{{ $quotation->product_price }}</td>
                     <td>
                         {{-- Add other actions as needed --}}
-                        {{-- <a href="{{ route('quotation.show', $quotation->id) }}" class="btn btn-primary">View</a> --}}
-                        <a class="btn btn-danger" href="{{ route('quotation.destroy', $quotation->id) }}">Delete</a>
+                        <a href="{{ route('quotation.show', $quotation->id) }}" class="btn btn-primary">View</a>
+                        <form action="{{ route('quotation.destroy', $quotation->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this quotation?')">Delete</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach

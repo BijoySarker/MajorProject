@@ -78,6 +78,11 @@ class QuotationController extends Controller
         return view('quotation.index', compact('quotations'));
     }
 
+    public function show(Quotation $quotation)
+    {
+        return view('quotation.show', compact('quotation'));
+    }
+
     public function destroy(Quotation $quotation)
     {
         $quotation->delete();

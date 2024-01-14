@@ -104,11 +104,10 @@ class ProductController extends Controller
         'brand' => 'sometimes|required',
         'description' => 'sometimes|required',
         'product_warranty' => 'sometimes|required',
-        'image' => 'sometimes|image|mimes:webp,jpeg,png,jpg,gif|max:2048', // Updated the image validation
-        'product_gallery.*' => 'sometimes|image|mimes:webp,jpeg,png,jpg,gif|max:2048', // Updated the product gallery validation
+        'image' => 'sometimes|image|mimes:webp,jpeg,png,jpg,gif|max:2048',
+        'product_gallery.*' => 'sometimes|image|mimes:webp,jpeg,png,jpg,gif|max:2048',
     ]);
 
-    // Update other fields
     $product->update($request->except('image', 'product_gallery', 'removed_images'));
 
     // Update product image if provided
@@ -126,7 +125,6 @@ class ProductController extends Controller
         $product->update(['product_image' => '/storage/' . $path]);
     }
 
-    // Update product gallery if provided
     if ($request->hasFile('product_gallery')) {
         $galleryImages = [];
         foreach ($request->file('product_gallery') as $galleryImage) {
@@ -136,7 +134,6 @@ class ProductController extends Controller
         $product->update(['product_gallery' => $galleryImages]);
     }
 
-    // Remove selected gallery images
     $removedImages = $request->input('removed_images');
     if ($removedImages) {
         $removedImagesArray = explode(',', rtrim($removedImages, ','));

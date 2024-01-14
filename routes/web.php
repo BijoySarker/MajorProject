@@ -81,4 +81,4 @@ Route::get('/search-products', [ProductController::class, 'search'])->name('sear
 Route::get('/get-product-details', [QuotationController::class, 'getProductDetails'])->name('get-product-details');
 Route::get('/quotation', [QuotationController::class, 'index'])->name('quotation.index');
 Route::get('/quotation/{quotaion}', [QuotationController::class, 'show'])->name('quotation.show');
-Route::get('/product/{quotation}/delete', [QuotationController::class, 'destroy'])->name('quotation.destroy');
+Route::delete('/product/{quotation}/delete', [QuotationController::class, 'destroy'])->name('quotation.destroy');
