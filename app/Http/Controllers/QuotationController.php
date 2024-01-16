@@ -23,21 +23,27 @@ class QuotationController extends Controller
             'quantity' => 'required|array',
             'unit_price' => 'required|array',
             'quotation_type' => 'required',
-            // Add other fields and validation rules as needed
+            'company_name' => 'required|string',
+            'company_address' => 'required|string',
+            'quotation_subject' => 'required|string',
+            'created_user' => 'required|integer', // Assuming it's an integer, adjust as needed
+            'company_persons' => 'required|string',
+            'attention_quot' => 'required|string',
+            'dear_sir' => 'required|string',
+            'quotation_body' => 'required|string',
+            'terms_and_condition' => 'required|string',
         ]);
 
-        // Convert arrays to JSON before storing
         $quantityJson = json_encode($request->input('quantity'));
         $unitPriceJson = json_encode($request->input('unit_price'));
 
-        // Calculate total price
         $totalPrice = array_sum(array_map(function ($quantity, $unitPrice) {
             return $quantity * $unitPrice;
         }, $request->input('quantity'), $request->input('unit_price')));
 
         $quotation = new Quotation([
             'quotation_number' => $request->input('quotation_number'),
-            'product_id' => json_encode($request->input('product_id')), // Convert product_id array to JSON
+            'product_id' => json_encode($request->input('product_id')),
             'terms_and_condition' => $request->input('terms_and_condition'),
             'quantity' => $quantityJson,
             'unit_price' => $unitPriceJson,
@@ -55,7 +61,7 @@ class QuotationController extends Controller
 
         $quotation->save();
 
-        return redirect()->route('quotation.create')->with('success', 'Quotation created successfully!');
+        return redirect()->route('quotation.index')->with('success', 'Quotation created successfully!');
     }
 
 
@@ -81,6 +87,7 @@ class QuotationController extends Controller
     public function show(Quotation $quotation)
     {
         return view('quotation.show', compact('quotation'));
+        // dd($quotation);
     }
 
     public function destroy(Quotation $quotation)

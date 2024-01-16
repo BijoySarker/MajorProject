@@ -18,7 +18,7 @@
     <style>
         .navbar {
             padding: 10px;
-            background-color: #f8f9fa; /* Customize the background color */
+            background-color: #f8f9fa;
         }
 
         .navbar-nav {

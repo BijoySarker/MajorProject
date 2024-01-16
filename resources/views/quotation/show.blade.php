@@ -46,9 +46,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($quotation->getProductIdsAttribute() as $productId)
+                                @foreach($quotation->getProductIdsAttribute() as $id)
                                     @php
-                                        $product = \App\Models\Product::find($productId);
+                                        $product = \App\Models\Product::find($id);
                                     @endphp
                                     <tr>
                                         <td>{{ $product->name }}</td>

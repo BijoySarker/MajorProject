@@ -25,7 +25,7 @@ class Quotation extends Model
         'attention_quot',
         'dear_sir',
         'quotation_body',
-        'products'
+        'product_id'
     ];
     
     protected $casts = [
@@ -34,6 +34,7 @@ class Quotation extends Model
         'product_id' => 'array',
     ];
 
+    
     public function products()
     {
         return $this->belongsToMany(Product::class)->withPivot('quantity', 'unit_price');
