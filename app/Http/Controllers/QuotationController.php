@@ -26,7 +26,7 @@ class QuotationController extends Controller
             'company_name' => 'required|string',
             'company_address' => 'required|string',
             'quotation_subject' => 'required|string',
-            'created_user' => 'required|integer', // Assuming it's an integer, adjust as needed
+            // 'created_user' => 'required|integer', // Assuming it's an integer, adjust as needed
             'company_persons' => 'required|string',
             'attention_quot' => 'required|string',
             'dear_sir' => 'required|string',
@@ -43,7 +43,6 @@ class QuotationController extends Controller
 
         $quotation = new Quotation([
             'quotation_number' => $request->input('quotation_number'),
-            'product_id' => json_encode($request->input('product_id')),
             'terms_and_condition' => $request->input('terms_and_condition'),
             'quantity' => $quantityJson,
             'unit_price' => $unitPriceJson,
@@ -59,6 +58,8 @@ class QuotationController extends Controller
             'product_price' => $totalPrice,
         ]);
 
+        $quotation = new Quotation;
+        $quotation->product_id = json_encode([26, 21]);
         $quotation->save();
 
         return redirect()->route('quotation.index')->with('success', 'Quotation created successfully!');

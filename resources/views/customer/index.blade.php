@@ -63,7 +63,14 @@
                     <td>{{ $customer->customer_name }}</td>
                     <td>{{ $customer->customer_type }}</td>
                     <td>{{ $customer->registered_by }}</td>
-                    <td>{{ $customer->customer_phone }}</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <span class="mr-2">{{ $customer->customer_phone }}</span>
+                            <button type="button" class="btn btn-link" onclick="window.location.href='tel:+88{{ $customer->customer_phone }}'">
+                                <span class="bi bi-telephone"></span> Call
+                            </button>
+                        </div>
+                    </td>
                     <td>{{ $customer->customer_email }}</td>
                     <td>{{ $customer->customer_city }}</td>
                     <td>
@@ -84,5 +91,8 @@
         {!! $customers->links() !!}
     </div>
 </div>
+<script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+</script>
 
 @endsection

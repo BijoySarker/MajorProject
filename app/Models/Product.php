@@ -21,4 +21,10 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class)->withDefault(); // Add ->withDefault() to set default values for the relationship
     }
+
+    public function quotations()
+    {
+        return $this->belongsToMany(Quotation::class)
+            ->withPivot('quantity', 'unit_price');
+    }
 }

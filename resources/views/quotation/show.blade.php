@@ -12,7 +12,6 @@
 
         <div class="row mt-3">
             <div class="col-lg-12">
-                <!-- Display Quotation Information -->
                 <div class="card">
                     <div class="card-header">
                         <h4>Quotation Information</h4>
@@ -68,7 +67,6 @@
                     </div>
                 </div>
 
-                <!-- Display Terms and Conditions -->
                 <div class="card mt-3">
                     <div class="card-header">
                         <h4>Terms and Conditions</h4>

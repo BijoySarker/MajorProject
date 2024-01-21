@@ -1,27 +1,27 @@
 @extends('layout')
 @section('title', 'Quotation Create')
 @section('content')
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-lg-12 d-flex justify-content-between align-items-center">
-                <h2>Add New Quotation</h2>
-                <a class="btn btn-primary" href="{{ route('quotation.index') }}">Back</a>
-            </div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-12 d-flex justify-content-between align-items-center">
+            <h2>Add New Quotation</h2>
+            <a class="btn btn-primary" href="{{ route('quotation.index') }}">Back</a>
         </div>
+    </div>
 
-        @if ($errors->any())
-            <div class="alert alert-danger mt-3">
-                <strong>Error!</strong> <br>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    @if ($errors->any())
+    <div class="alert alert-danger mt-3">
+        <strong>Error!</strong> <br>
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
 
-                    <form method="POST" action="{{ route('quotation.store') }}">
-                        @csrf
+    <form method="POST" action="{{ route('quotation.store') }}">
+        @csrf
 
                         <div class="custom-form-group">
                             <label for="quotation_number">Quotation Number</label>

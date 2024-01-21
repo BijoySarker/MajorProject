@@ -37,18 +37,21 @@ class Quotation extends Model
     
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('quantity', 'unit_price');
+        return $this->belongsToMany(Product::class)
+            ->withPivot('quantity', 'unit_price');
     }
 
+    // Accessor to retrieve total price attribute
     public function getTotalPriceAttribute()
     {
         return $this->products->sum(function ($product) {
             return $product->pivot->quantity * $product->pivot->unit_price;
         });
     }
-    
+
+    // Accessor to retrieve an array of product IDs
     public function getProductIdsAttribute()
     {
-        return $this->product_id ? json_decode($this->product_id, true) : [];
+        return json_decode($this->attributes['product_id'], true);
     }
 }
