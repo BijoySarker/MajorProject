@@ -5,6 +5,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ForgetPasswordManager;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QuotationController;
 use Illuminate\Auth\Events\Login;
@@ -38,7 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('/forgetpassword', [ForgetPasswordManager::class, 'forgetPassword'])->name('forget.password');
 Route::post('/forgetpassword', [ForgetPasswordManager::class, 'forgetPasswordPost'])->name('forget.password.post');
 
-//Product
+//Product routes start
 Route::get('/product', [ProductController::class, 'index'])->name('products.index');
 Route::get('/product/create', [ProductController::class, 'create'])->name('products.create');
 Route::post('/product/store', [ProductController::class, 'store'])->name('products.store');
@@ -47,7 +48,7 @@ Route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name(
 Route::put('/product/{product}', [ProductController::class, 'update'])->name('product.update');
 Route::get('/product/{product}/delete', [ProductController::class, 'destroy'])->name('product.destroy');
 
-//Category
+//Category routes start
 Route::get('/category', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/category/create', [CategoryController::class, 'create'])->name('categories.create');
 Route::post('/category/store', [CategoryController::class, 'store'])->name('categories.store');
@@ -57,7 +58,7 @@ Route::get('/category/{categoryChild}', [CategoryController::class, 'destroy'])-
 Route::get('/categories/parent', [CategoryController::class, 'parentCategories'])->name('categories.parent');
 Route::delete('/categories/{category}', [CategoryController::class, 'delete'])->name('categories.delete');
 
-//Brand
+//Brand routes start
 Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
 Route::get('/brand/create', [BrandController::class, 'create'])->name('brand.create');
 Route::post('/brand/store', [BrandController::class, 'store'])->name('brand.store');
@@ -65,7 +66,7 @@ Route::get('/brand/{brand}/edit', [BrandController::class, 'edit'])->name('brand
 Route::put('/brand/{brand}', [BrandController::class, 'update'])->name('brand.update');
 Route::get('/brand/{brand}/delete', [BrandController::class, 'destroy'])->name('brand.destroy');
 
-//Customer
+//Customer routes start
 Route::get('/customer', [CustomerController::class, 'index'])->name('customer.index');
 Route::get('/customer/create', [CustomerController::class, 'create'])->name('customer.create');
 Route::post('/customer/store', [CustomerController::class, 'store'])->name('customer.store');
@@ -77,8 +78,21 @@ Route::get('/customer/{customer}/delete', [CustomerController::class, 'destroy']
 //quotation routes start
 Route::get('/quotation/create', [QuotationController::class, 'create'])->name('quotation.create');
 Route::post('/quotation/store', [QuotationController::class, 'store'])->name('quotation.store');
-Route::get('/search-products', [ProductController::class, 'search'])->name('search-products');
 Route::get('/get-product-details', [QuotationController::class, 'getProductDetails'])->name('get-product-details');
 Route::get('/quotation', [QuotationController::class, 'index'])->name('quotation.index');
 Route::get('/quotation/{quotaion}', [QuotationController::class, 'show'])->name('quotation.show');
 Route::delete('/quotation/{quotation}/delete', [QuotationController::class, 'destroy'])->name('quotation.destroy');
+
+//invoice routes start
+Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index');
+Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('invoice.create');
+Route::post('/invoice/store', [InvoiceController::class, 'store'])->name('invoice.store');
+Route::get('/get-product-details', [InvoiceController::class, 'getProductDetails'])->name('get-product-details');
+Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
+Route::get('/invoice/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoice.edit');
+Route::get('/invoice/{invoice}', [InvoiceController::class, 'update'])->name('invoice.update');
+Route::get('/invoice/{invoice}/delete', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
+
+//AJAX live search
+Route::get('/search-products', [ProductController::class, 'search'])->name('search-products');
+Route::get('/search-customers', [InvoiceController::class, 'searchCustomers'])->name('search-customers');

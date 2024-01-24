@@ -157,6 +157,6 @@ class ProductController extends Controller
         $query = $request->input('query');
         $products = Product::where('product_name', 'LIKE', "%$query%")->get();
 
-        return view('quotation.product_search_results', compact('products'));
+        return view('search.product_search_results', compact('products'));
     }
 }

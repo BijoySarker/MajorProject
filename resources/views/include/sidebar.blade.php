@@ -42,10 +42,37 @@
           <i class='bx bxs-chevron-down arrow' ></i>
         </div>
         <ul class="sub-menu">
-          <li><a class="link_name" href="{{ route('customer.index') }}">Customer</a></li>
+          <li><a class="link_name" href="#">Customer</a></li>
           <li><a href="{{ route('customer.index') }}">Customer List</a></li>
-          <li><a href="{{ route('quotation.create') }}">Quotation Create</a></li>
+          <li><a href="{{ route('customer.create') }}">Create New Customer</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="iocn-link">
+          <a href="#">
+            <i class='bx bx-book-alt' ></i>
+            <span class="link_name">Posts</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Invoice</a></li>
+          <li><a href="{{ route('invoice.index') }}">Invoice List</a></li>
+          <li><a href="{{ route('invoice.create') }}">Invoice Create</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="iocn-link">
+          <a href="#">
+            <i class='bx bx-book-alt' ></i>
+            <span class="link_name">Posts</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Quotaion</a></li>
           <li><a href="{{ route('quotation.index') }}">Quotation List</a></li>
+          <li><a href="{{ route('quotation.create') }}">Quotation Create</a></li>
         </ul>
       </li>
 
