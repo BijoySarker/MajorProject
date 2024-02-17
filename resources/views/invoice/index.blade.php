@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Incoice')
+@section('title', 'Invoice')
 @section('content')
 
 <style>
@@ -62,19 +62,19 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($invoices as $invoice)
+            @foreach ($invoices as $key => $invoice)
             <tr>
-                <td>{{ ++$i }}</td>
+                <td>{{ $key + 1 }}</td>
+                <td>{{ $invoice->invoice_number }}</td>
+                <td>{{ $invoice->date }}</td>
+                <td>{{ $invoice->customer->customer_name }}</td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ $invoice->paid }}</td>
+                <td>{{ $invoice->due }}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ route('invoice.show', $invoice->id) }}">Show</a>
-                    <a class="btn btn-warning" href="{{ route('invoice.edit', $invoice->id) }}">Edit</a>
-                    <a class="btn btn-danger" href="{{ route('invoice.destroy', $invoice->id) }}">Delete</a>
+                    <a class="btn btn-primary" href="">Show</a>
+                    <a class="btn btn-warning" href="">Edit</a>
+                    <a class="btn btn-danger" href="">Delete</a>
                 </td>
             </tr>
             @endforeach

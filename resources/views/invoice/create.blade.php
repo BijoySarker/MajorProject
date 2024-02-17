@@ -103,7 +103,6 @@
         });
     
         $(document).ready(function () {
-            // Customer search functionality
             $('#customer_search').on('input', function () {
                 var query = $(this).val();
     
@@ -131,7 +130,7 @@
             // Product search functionality
             $('#product_search').on('input', function () {
                 var query = $(this).val();
-    
+
                 if (query.length >= 3) {
                     $.ajax({
                         url: '{{ route('search-products') }}',
@@ -143,23 +142,38 @@
                     });
                 }
             });
-    
+
+            $('#product_search').on('input', function () {
+                var query = $(this).val();
+
+                if (query.length >= 3) {
+                    $.ajax({
+                        url: '{{ route('search-products') }}',
+                        method: 'GET',
+                        data: { query: query },
+                        success: function (data) {
+                            $('#product_results').html(data);
+                        }
+                    });
+                }
+            });
+
             $('#product_results').on('click', '.list-group-item', function () {
                 var productId = $(this).data('product-id');
                 var productName = $(this).data('product-name');
-    
+
                 $.ajax({
                     url: '{{ route('get-product-details') }}',
                     method: 'GET',
                     data: { productId: productId },
                     success: function (productDetails) {
+
                         var existingIds = $('#product_ids').val() ? JSON.parse($('#product_ids').val()) : [];
+                        
                         existingIds.push(productId);
-    
-                        // Set the product_ids field as an array
+
                         $('#product_ids').val(JSON.stringify(existingIds));
-    
-                        // Use the stored array directly, no need to parse again
+
                         $('#selected_products_body').append(`
                             <tr data-product-id="${productId}">
                                 <td>${productName}</td>
@@ -172,11 +186,11 @@
                         `);
                     }
                 });
-    
+
                 $('#product_search').val('');
                 $('#product_results').html('');
             });
-    
+
             // Remove selected product
             $('#selected_products_body').on('click', 'button.btn-danger', function () {
                 var productId = $(this).closest('tr').data('product-id');
@@ -197,13 +211,27 @@
             // New function to update due amount
             function updateDueAmount() {
                 var total = parseFloat($('#total_price').text());
-                var payment = parseFloat($('#payment_input').val()) || 0; // Use the input value
+                var payment = parseFloat($('#payment_input').val()) || 0;
                 var due = total - payment;
                 $('#due_amount').text(due.toFixed(2));
             }
     
             function removeProduct(productId) {
-                $('[data-product-id="' + productId + '"]').remove();
+                // Get existing product IDs from the hidden input field
+                var existingIds = $('#product_ids').val() ? JSON.parse($('#product_ids').val()) : [];
+                
+                // Find the index of the product ID to remove
+                var index = existingIds.indexOf(productId);
+                
+                // Remove the product ID from the array
+                if (index !== -1) {
+                    existingIds.splice(index, 1);
+                    // Set the product_ids field as a JSON-encoded array
+                    $('#product_ids').val(JSON.stringify(existingIds));
+                }
+                
+                // Remove the product row from the table
+                $('tr[data-product-id="' + productId + '"]').remove();
             }
     
             function updateTotalPrice() {
@@ -220,5 +248,5 @@
             }
         });
     </script>
-    
-@endsection
+
+    @endsection

@@ -23,8 +23,8 @@ class Invoice extends Model
     ];
 
     protected $casts = [
-        'product_ids' => 'array',
-        'quantity' => 'array',
+        // 'product_ids' => 'array',
+        // 'quantity' => 'array',
         'paid' => 'boolean',
     ];
 
