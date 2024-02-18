@@ -18,6 +18,7 @@ class Invoice extends Model
         'paid',
         'due',
         'terms_and_conditions',
+        'total_price',
         'pay',
         'due'
     ];

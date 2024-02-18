@@ -1,5 +1,5 @@
 @extends('layout')
-
+@section('title', 'Create New Category')
 @section('content')
     <div class="container mt-4">
         <div class="row">

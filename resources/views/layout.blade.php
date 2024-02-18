@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <link rel="icon" href="{{ asset('storage/favicon/icons8-shopee-48.png') }}" type="image/png">
-    <link rel="shortcut icon" href="{{ asset('storage/favicon/icons8-shopee-48.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('storage/favicon/icons8-star-filled-color-96.png') }}" type="image/png">
 
     <!-- CKEditor -->
     <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>

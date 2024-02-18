@@ -82,8 +82,13 @@
                 <td>
                     <a class="btn btn-primary" href="{{ route('invoice.show', $invoice->id) }}">Show</a>
                     <a class="btn btn-warning" href="">Edit</a>
-                    <a class="btn btn-danger" href="">Delete</a>
+                    <form action="{{ route('invoice.destroy', $invoice->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this invoice?')">Delete</button>
+                    </form>
                 </td>
+                
             </tr>
             @endforeach
         </tbody>

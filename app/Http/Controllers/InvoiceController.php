@@ -63,14 +63,10 @@ class InvoiceController extends Controller
             ]);
         }
 
-        // return redirect()->route('invoice.index')->with('success', 'Invoice created successfully');
+        return redirect()->route('invoice.index')->with('success', 'Invoice created successfully');
 
-        dd($invoiceData);
+        // dd($invoiceData);
     }
-
-
-
-
 
     private function validateInvoiceRequest(Request $request)
     {
@@ -80,6 +76,7 @@ class InvoiceController extends Controller
             'customer_id' => 'required|exists:customers,id',           
             'paid' => 'boolean',
             'due' => 'numeric',
+            'total_price' => 'numeric',
             'terms_and_conditions' => 'nullable|string',
             // Add other validation rules as needed
         ]);
@@ -131,9 +128,23 @@ class InvoiceController extends Controller
         ]);
     }
 
-    public function show(Invoice $invoice)
+    public function show($id)
     {
-        $invoice->load('customer');
+        $invoice = Invoice::findOrFail($id);
+        
+        // Decode product_ids and quantity fields
+        $invoice->product_ids = json_decode($invoice->product_ids, true) ?? [];
+        $invoice->quantity = json_decode($invoice->quantity, true) ?? [];
+
         return view('invoice.show', compact('invoice'));
     }
+
+    public function destroy(Invoice $invoice)
+    {
+        
+        $invoice->delete();
+
+        return redirect()->route('invoice.index')->with('success', 'Invoice deleted successfully');
+    }
+
 }
