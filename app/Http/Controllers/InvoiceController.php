@@ -11,7 +11,8 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = Invoice::all();
+        $invoices = Invoice::orderBy('created_at', 'desc')->get();
+
         return view('invoice.index', compact('invoices'));
     }
 
@@ -26,31 +27,34 @@ class InvoiceController extends Controller
     {
         $this->validateInvoiceRequest($request);
 
-        $products = $this->prepareProducts($request);
+        // Retrieve pay, due, and total price from form inputs
+        $pay = $request->input('pay');
+        $due = $request->input('due');
+        $totalPrice = $request->input('total_price');
 
-        $totalPrice = array_sum(array_map(function ($product) {
-            return $product['quantity'] * Product::find($product['id'])->price;
-        }, $products));
+        // Encode product_ids as JSON
+        $productIds = $request->input('product_ids');
+        $encodedProductIds = json_encode($productIds);
 
+        // Include pay, due, and total price in the $invoiceData array
         $invoiceData = [
             'invoice_number' => $request->input('invoice_number'),
             'date' => $request->input('date'),
             'customer_id' => $request->input('customer_id'),
-            'paid' => $request->input('paid'),
-            'due' => $totalPrice - ($request->input('pay') ?? 0),
+            'paid' => $due == 0 ? 1 : 0,
+            'due' => $due,
+            'total_price' => $totalPrice, // Assign total_price directly
             'terms_and_conditions' => $request->input('terms_and_conditions'),
+            'quantity' => is_array($request->input('quantity')) ? json_encode($request->input('quantity')) : $request->input('quantity'),
+            'product_ids' => $encodedProductIds,
+            'pay' => $pay,
         ];
 
-        // Check if 'quantity' is an array and encode it as JSON
-        if (is_array($request->input('quantity'))) {
-            $invoiceData['quantity'] = json_encode($request->input('quantity'));
-        } else {
-            $invoiceData['quantity'] = $request->input('quantity');
-        }
-
+        // Create a new invoice record in the database
         $invoice = Invoice::create($invoiceData);
 
         // Associate products with the invoice
+        $products = $this->prepareProducts($request);
         foreach ($products as $product) {
             $invoice->products()->create([
                 'id' => $product['id'],
@@ -59,17 +63,21 @@ class InvoiceController extends Controller
             ]);
         }
 
-        return redirect()->route('invoice.index')->with('success', 'Invoice created successfully');
+        // return redirect()->route('invoice.index')->with('success', 'Invoice created successfully');
+
+        dd($invoiceData);
     }
-    // Validate invoice request
+
+
+
+
+
     private function validateInvoiceRequest(Request $request)
     {
         $request->validate([
             'invoice_number' => 'required',
             'date' => 'required|date',
-            'customer_id' => 'required|exists:customers,id',
-            // 'product_ids' => 'required|array',
-            // 'quantity' => 'required|array',
+            'customer_id' => 'required|exists:customers,id',           
             'paid' => 'boolean',
             'due' => 'numeric',
             'terms_and_conditions' => 'nullable|string',
@@ -121,5 +129,11 @@ class InvoiceController extends Controller
             'image' => $product->product_image,
             'price' => $product->price,
         ]);
+    }
+
+    public function show(Invoice $invoice)
+    {
+        $invoice->load('customer');
+        return view('invoice.show', compact('invoice'));
     }
 }
