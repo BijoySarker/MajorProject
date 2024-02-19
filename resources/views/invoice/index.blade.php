@@ -30,7 +30,7 @@
         <div class="col-lg-6">
             <form action="{{ route('invoice.index') }}" method="GET" role="search">
                 <div class="input-group">
-                    <input type="text" class="form-control" name="search" placeholder="Search by Invoice Number">
+                    <input type="text" class="form-control" name="search" placeholder="Search by Invoice Number or Customer Name" value="{{ request('search') }}">
                     <span class="input-group-btn">
                         <button type="submit" class="btn btn-primary">Search</button>
                     </span>
@@ -97,8 +97,8 @@
 
     {{-- <div class="mt-3">
         {!! $invoices->links() !!}
-    </div>
-</div> --}}
+    </div> --}}
+</div>
 
 @endsection
 

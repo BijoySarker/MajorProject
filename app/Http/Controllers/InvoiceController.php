@@ -135,13 +135,16 @@ class InvoiceController extends Controller
         // Decode product_ids and quantity fields
         $invoice->product_ids = json_decode($invoice->product_ids, true) ?? [];
         $invoice->quantity = json_decode($invoice->quantity, true) ?? [];
-
-        return view('invoice.show', compact('invoice'));
-    }
+    
+        // Fetch products based on the product IDs stored in the invoice
+        $productIds = json_decode($invoice->product_ids);
+        $products = Product::whereIn('id', $productIds)->get();
+    
+        return view('invoice.show', compact('invoice', 'products'));
+    }    
 
     public function destroy(Invoice $invoice)
-    {
-        
+    {        
         $invoice->delete();
 
         return redirect()->route('invoice.index')->with('success', 'Invoice deleted successfully');
