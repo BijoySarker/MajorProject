@@ -27,6 +27,7 @@ class Invoice extends Model
         // 'product_ids' => 'array',
         // 'quantity' => 'array',
         'paid' => 'boolean',
+        
     ];
 
     public function customer()

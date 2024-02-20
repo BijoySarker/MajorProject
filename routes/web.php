@@ -91,7 +91,9 @@ Route::get('/get-product-details', [InvoiceController::class, 'getProductDetails
 Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
 // Route::get('/invoice/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoice.edit');
 // Route::get('/invoice/{invoice}', [InvoiceController::class, 'update'])->name('invoice.update');
-Route::delete('/invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
+Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
+Route::get('/invoice/{invoice}/print', [InvoiceController::class, 'print'])->name('invoice.print');
+
 
 //AJAX live search
 Route::get('/search-products', [ProductController::class, 'search'])->name('search-products');

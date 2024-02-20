@@ -150,4 +150,9 @@ class InvoiceController extends Controller
         return redirect()->route('invoice.index')->with('success', 'Invoice deleted successfully');
     }
 
+    public function print($id)
+    {
+
+        return view('invoice.print', compact('invoice', 'products'));
+    }
 }
