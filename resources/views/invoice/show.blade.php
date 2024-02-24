@@ -8,15 +8,20 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-lg-12 d-flex justify-content-between align-items-center">
+            <h2>Invoice</h2>
+            <a class="btn btn-primary" href="{{ route('invoice.index') }}">Back</a>
+        </div>
+    </div>
+    <div class="row">
         <!-- Invoice Information -->
         <div class="col-lg-6">
-            <h2>Invoice</h2>
             <p><strong>Invoice Number:</strong> {{ $invoice->invoice_number }}</p>
             <p><strong>Invoice Date:</strong> {{ \Carbon\Carbon::parse($invoice->date)->format('d F Y') }}</p>
         </div>
         <!-- Logo -->
         <div class="col-lg-6 text-end">
-            <img src="logo.png" alt="Company Logo" style="max-width: 150px;">
+            <img src="{{ asset('storage/logo/demo_logo.jpg') }}" alt="Company Logo" style="max-width: 150px;">
         </div>
     </div>
 
@@ -73,13 +78,21 @@
             <p><strong>Total Amount Paid:</strong> &#2547;{{ number_format($invoice->pay, 2, '.', ',') }}</p>
             <p><strong>Remaining Balance:</strong> &#2547;{{ number_format($invoice->due, 2, '.', ',') }}</p>
         </div>
+        <!-- Paid/Due Image -->
+        <div class="col-lg-3 text-end">
+            @if($invoice->paid)
+                <img src="{{ asset('storage/paid/paid_image.webp') }}" alt="Paid" style="max-width: 200px;">
+            @else
+                <img src="{{ asset('storage/paid/due_image.webp') }}" alt="Due" style="max-width: 200px;">
+            @endif
+        </div>
     </div>
 
     <div class="row mt-4">
         <!-- Terms and Conditions -->
         <div class="col-lg-6">
             <h3>Terms and Conditions</h3>
-            <p>{{ $invoice->terms_and_conditions }}</p>
+            <p>{{ strip_tags($invoice->terms_and_conditions) }}</p>
         </div>
     </div>
     

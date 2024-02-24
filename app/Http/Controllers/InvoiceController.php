@@ -43,14 +43,13 @@ class InvoiceController extends Controller
             'customer_id' => $request->input('customer_id'),
             'paid' => $due == 0 ? 1 : 0,
             'due' => $due,
-            'total_price' => $totalPrice, // Assign total_price directly
+            'total_price' => $totalPrice,
             'terms_and_conditions' => $request->input('terms_and_conditions'),
             'quantity' => is_array($request->input('quantity')) ? json_encode($request->input('quantity')) : $request->input('quantity'),
             'product_ids' => $encodedProductIds,
             'pay' => $pay,
         ];
 
-        // Create a new invoice record in the database
         $invoice = Invoice::create($invoiceData);
 
         // Associate products with the invoice
@@ -59,7 +58,6 @@ class InvoiceController extends Controller
             $invoice->products()->create([
                 'id' => $product['id'],
                 'quantity' => $product['quantity'],
-                // Add other product details as needed
             ]);
         }
 
@@ -78,7 +76,6 @@ class InvoiceController extends Controller
             'due' => 'numeric',
             'total_price' => 'numeric',
             'terms_and_conditions' => 'nullable|string',
-            // Add other validation rules as needed
         ]);
     }
 
@@ -94,7 +91,6 @@ class InvoiceController extends Controller
                 $products[] = [
                     'id' => $productId,
                     'quantity' => $quantities[$index],
-                    // Add other product details as needed
                 ];
             }
         } else {
@@ -152,7 +148,18 @@ class InvoiceController extends Controller
 
     public function print($id)
     {
+        $invoice = Invoice::findOrFail($id);
+        
+        // Decode product_ids and quantity fields
+        $invoice->product_ids = json_decode($invoice->product_ids, true) ?? [];
+        $invoice->quantity = json_decode($invoice->quantity, true) ?? [];
+    
+        // Fetch products based on the product IDs stored in the invoice
+        $productIds = json_decode($invoice->product_ids);
+        $products = Product::whereIn('id', $productIds)->get();
 
-        return view('invoice.print', compact('invoice', 'products'));
+        return view('invoice.print', compact('invoice', 'products')); // Pass the invoice and products data to the print view
+
+        // dd($products);
     }
 }

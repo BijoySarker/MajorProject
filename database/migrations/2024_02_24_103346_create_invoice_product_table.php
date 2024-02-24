@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateInvoiceProductTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('invoice_product', function (Blueprint $table) {
@@ -19,19 +14,13 @@ class CreateInvoiceProductTable extends Migration
             
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-
-            // Add any additional columns you need in the pivot table
-            // For example: $table->integer('quantity')->unsigned();
-
-            $table->timestamps();
+            
+            $table->unsignedInteger('quantity');
+            
+            $table->primary(['invoice_id', 'product_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('invoice_product');
