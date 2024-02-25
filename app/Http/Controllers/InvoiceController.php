@@ -137,7 +137,40 @@ class InvoiceController extends Controller
         $products = Product::whereIn('id', $productIds)->get();
     
         return view('invoice.show', compact('invoice', 'products'));
-    }    
+    }
+    
+    public function edit($id)
+    {
+        $invoice = Invoice::findOrFail($id);
+        $customers = Customer::all();
+        $products = Product::all();
+        
+        // Decode product_ids and quantity fields
+        $invoice->product_ids = json_decode($invoice->product_ids, true) ?? [];
+        $invoice->quantity = json_decode($invoice->quantity, true) ?? [];
+        
+        // Fetch products based on the product IDs stored in the invoice
+        $productIds = json_decode($invoice->product_ids);
+        $selectedProducts = Product::whereIn('id', $productIds)->get();
+        
+        return view('invoice.edit', compact('invoice', 'customers', 'products', 'selectedProducts'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validateInvoiceRequest($request);
+
+        $invoice = Invoice::findOrFail($id);
+
+        // Update invoice data
+        $invoice->invoice_number = $request->input('invoice_number');
+        $invoice->date = $request->input('date');
+        // Update other fields as needed...
+
+        $invoice->save();
+
+        return redirect()->route('invoice.index')->with('success', 'Invoice updated successfully');
+    }
 
     public function destroy(Invoice $invoice)
     {        

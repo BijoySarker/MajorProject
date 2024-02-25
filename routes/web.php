@@ -88,9 +88,9 @@ Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index
 Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('invoice.create');
 Route::post('/invoice/store', [InvoiceController::class, 'store'])->name('invoice.store');
 Route::get('/get-product-details', [InvoiceController::class, 'getProductDetails'])->name('get-product-details');
-Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
-// Route::get('/invoice/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoice.edit');
-// Route::get('/invoice/{invoice}', [InvoiceController::class, 'update'])->name('invoice.update');
+Route::get('/invoice/{invoice}/show', [InvoiceController::class, 'show'])->name('invoice.show');
+Route::get('/invoice/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoice.edit');
+Route::put('/invoice/{invoice}', [InvoiceController::class, 'update'])->name('invoice.update');
 Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
 Route::get('/invoice/{invoice}/print', [InvoiceController::class, 'print'])->name('invoice.print');
 

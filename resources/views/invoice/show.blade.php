@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-4">
     <div class="row mt-4">
-        <div class="col-lg-12">
+        <div class="col-lg-12 text-center mb-4">
             <button class="btn btn-primary" onclick="window.open('{{ route('invoice.print', $invoice->id) }}', '_blank')">Print Invoice</button>
         </div>
     </div>
