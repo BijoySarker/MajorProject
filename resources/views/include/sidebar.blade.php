@@ -82,7 +82,8 @@
           <span class="link_name">Setting</span>
         </a>
         <ul class="sub-menu blank">
-          <li><a class="link_name" href="#">Setting</a></li>
+          <li><a href="">User Setting</a></li>
+          <li><a href="{{ route('general_settings.index') }}">General Setting</a></li>
         </ul>
       </li>
       

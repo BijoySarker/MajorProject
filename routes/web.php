@@ -5,6 +5,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ForgetPasswordManager;
+use App\Http\Controllers\GeneralSettingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QuotationController;
@@ -98,3 +99,8 @@ Route::get('/invoice/{invoice}/print', [InvoiceController::class, 'print'])->nam
 //AJAX live search
 Route::get('/search-products', [ProductController::class, 'search'])->name('search-products');
 Route::get('/search-customers', [InvoiceController::class, 'searchCustomers'])->name('search-customers');
+
+//general setting routes start
+Route::get('/general_settings/create', [GeneralSettingController::class, 'create'])->name('general_settings.create');
+Route::post('/general_settings/store', [GeneralSettingController::class, 'store'])->name('general_settings.store');
+Route::get('/general_settings', [GeneralSettingController::class, 'index'])->name('general_settings.index');
