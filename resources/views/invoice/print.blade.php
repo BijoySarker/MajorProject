@@ -249,7 +249,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class = "overflow-view">
                         <div class = "invoice-body">
                             <table>
                                 <thead>
@@ -282,7 +281,6 @@
                                 </tfoot>
                             </table>
                         </div>
-                    </div>
 
                     <div class="row mt-3">
                         <!-- Payment Information -->

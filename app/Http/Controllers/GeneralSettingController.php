@@ -9,15 +9,15 @@ class GeneralSettingController extends Controller
 {
     public function create()
     {
-        // Check if a general setting already exists
+        // Check if no general setting exists
         $generalSetting = GeneralSetting::first();
 
-        // If a setting exists, redirect to index page
-        if ($generalSetting) {
-            return redirect()->route('setting.general_setting.index')->with('error', 'General settings already exist.');
+        // If no setting exists, show the create form
+        if (!$generalSetting) {
+            return view('setting.general_setting.create');
         }
 
-        return view('setting.general_setting.create');
+        return redirect()->route('setting.general_setting.index')->with('error', 'General settings already exist.');
     }
 
     public function store(Request $request)

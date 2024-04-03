@@ -66,7 +66,7 @@
                             @if ($childCategory->image)
                                 <img src="{{ asset($childCategory->image) }}" alt="Image" class="img-thumbnail">
                                 <button type="button" class="btn btn-danger mt-2" id="removeImageButton">Remove Image</button>
-                                <input type="hidden" name="remove_image" id="removeImageInput" value="0">
+                                <input type="hidden" name="remove_image" id="removeImageInput" value="0"> <!-- Hidden input for remove_image -->
                             @endif
                         </div>
                         <div id="newImageSection" style="display:none;">
@@ -87,49 +87,12 @@
             var imageContainer = document.getElementById('imageContainer');
             var newImageSection = document.getElementById('newImageSection');
             var removeImageInput = document.getElementById('removeImageInput');
-            var imageInput = document.getElementById('newImage');
-    
-            // Show/hide elements based on whether an image exists
-            function toggleImageElements() {
-                if (imageContainer.querySelector('img')) {
-                    imageContainer.style.display = 'block';
-                    newImageSection.style.display = 'none';
-                } else {
-                    imageContainer.style.display = 'none';
-                    newImageSection.style.display = 'block';
-                }
-            }
-    
-            // Initial toggle
-            toggleImageElements();
-    
+
             removeImageButton.addEventListener('click', function () {
-                // Set the value of the remove_image input to 1
-                removeImageInput.value = '1';
-    
-                // Clear the existing image preview
-                imageContainer.innerHTML = '';
-    
-                // Toggle image elements visibility
-                toggleImageElements();
-            });
-    
-            // Update image preview on new image selection
-            imageInput.addEventListener('change', function () {
-                // Clear the existing image preview
-                imageContainer.innerHTML = '';
-    
-                // Create a new image element
-                var newImage = document.createElement('img');
-                newImage.src = URL.createObjectURL(this.files[0]);
-                newImage.alt = 'New Image';
-                newImage.classList.add('img-thumbnail');
-    
-                // Append the new image to the container
-                imageContainer.appendChild(newImage);
-    
-                // Toggle image elements visibility
-                toggleImageElements();
+                // Hide the image but keep the container visible
+                imageContainer.querySelector('img').style.display = 'none';
+                newImageSection.style.display = 'block';
+                removeImageInput.value = '1'; // Set to 1 to indicate the removal of the image
             });
         });
     </script>
