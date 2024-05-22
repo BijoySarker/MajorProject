@@ -165,12 +165,43 @@ class InvoiceController extends Controller
         // Update invoice data
         $invoice->invoice_number = $request->input('invoice_number');
         $invoice->date = $request->input('date');
-        // Update other fields as needed...
+        $invoice->customer_id = $request->input('customer_id');
+        $invoice->terms_and_conditions = $request->input('terms_and_conditions');
 
+        // Retrieve product details
+        $productIds = $request->input('product_ids');
+        $quantities = $request->input('quantity');
+        $unitPrices = $request->input('unit_price');
+
+        // Prepare product data
+        $products = [];
+        foreach ($productIds as $index => $productId) {
+            $products[$productId] = [
+                'quantity' => $quantities[$index],
+                'unit_price' => $unitPrices[$index],
+            ];
+        }
+
+        // Update products associated with the invoice
+        $invoice->products()->sync($products);
+
+        // Recalculate total price
+        $totalPrice = 0;
+        foreach ($products as $productId => $product) {
+            $totalPrice += $product['quantity'] * $product['unit_price'];
+        }
+        $invoice->total_price = $totalPrice;
+
+        // Calculate and update due amount
+        $invoice->due = $totalPrice - $request->input('pay');
+        $invoice->paid = $invoice->due == 0 ? 1 : 0;
+
+        // Save the changes
         $invoice->save();
 
         return redirect()->route('invoice.index')->with('success', 'Invoice updated successfully');
     }
+
 
     public function destroy(Invoice $invoice)
     {        

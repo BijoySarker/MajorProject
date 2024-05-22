@@ -175,6 +175,14 @@
                 min-width: 600px;
             }
 
+            .invoice-payment-info {
+                margin-bottom: 10px; /* Adjust margin as needed */
+            }
+
+            .invoice-payment-image img {
+                max-height: 100px; /* Adjust max height of the image */
+            }
+
             @media print {
             .invoice-btns {
                 display: none;
@@ -294,7 +302,7 @@
                             <img src="{{ $invoice->paid ? asset('storage/paid/paid_image.webp') : asset('storage/paid/due_image.webp') }}" alt="{{ $invoice->paid ? 'Paid' : 'Due' }}" style="max-width: 100%; height: auto;">
                         </div>
                     </div>
-                    <div class = "invoice-foot text-center">
+                    <div class = "invoice-foot text-left">
                         <p><span class = "text-bold text-center">NOTE:&nbsp;</span>{{ strip_tags($invoice->terms_and_conditions) }}</p>
 
                     </div>
