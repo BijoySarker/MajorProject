@@ -71,7 +71,7 @@ class InvoiceController extends Controller
         $request->validate([
             'invoice_number' => 'required',
             'date' => 'required|date',
-            'customer_id' => 'required|exists:customers,id',           
+            'customer_id' => 'required|exists:customers,id',
             'paid' => 'boolean',
             'due' => 'numeric',
             'total_price' => 'numeric',
@@ -127,32 +127,32 @@ class InvoiceController extends Controller
     public function show($id)
     {
         $invoice = Invoice::findOrFail($id);
-        
+
         // Decode product_ids and quantity fields
         $invoice->product_ids = json_decode($invoice->product_ids, true) ?? [];
         $invoice->quantity = json_decode($invoice->quantity, true) ?? [];
-    
+
         // Fetch products based on the product IDs stored in the invoice
         $productIds = json_decode($invoice->product_ids);
         $products = Product::whereIn('id', $productIds)->get();
-    
+
         return view('invoice.show', compact('invoice', 'products'));
     }
-    
+
     public function edit($id)
     {
         $invoice = Invoice::findOrFail($id);
         $customers = Customer::all();
         $products = Product::all();
-        
+
         // Decode product_ids and quantity fields
         $invoice->product_ids = json_decode($invoice->product_ids, true) ?? [];
         $invoice->quantity = json_decode($invoice->quantity, true) ?? [];
-        
+
         // Fetch products based on the product IDs stored in the invoice
         $productIds = json_decode($invoice->product_ids);
         $selectedProducts = Product::whereIn('id', $productIds)->get();
-        
+
         return view('invoice.edit', compact('invoice', 'customers', 'products', 'selectedProducts'));
     }
 
@@ -204,7 +204,7 @@ class InvoiceController extends Controller
 
 
     public function destroy(Invoice $invoice)
-    {        
+    {
         $invoice->delete();
 
         return redirect()->route('invoice.index')->with('success', 'Invoice deleted successfully');
@@ -213,11 +213,11 @@ class InvoiceController extends Controller
     public function print($id)
     {
         $invoice = Invoice::findOrFail($id);
-        
+
         // Decode product_ids and quantity fields
         $invoice->product_ids = json_decode($invoice->product_ids, true) ?? [];
         $invoice->quantity = json_decode($invoice->quantity, true) ?? [];
-    
+
         // Fetch products based on the product IDs stored in the invoice
         $productIds = json_decode($invoice->product_ids);
         $products = Product::whereIn('id', $productIds)->get();
